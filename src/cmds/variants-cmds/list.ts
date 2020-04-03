@@ -1,6 +1,6 @@
 import { Arguments, Argv } from 'yargs';
 import { PushApplication, PushApplicationFilter, Variant, VariantFilter } from '@aerogear/unifiedpush-admin-client';
-import { UPSAdminClientFactory } from '../UPSAdminClientFactory';
+import { UPSAdminClientFactory } from '../../utils/UPSAdminClientFactory';
 import { table } from 'table';
 
 exports.command = 'list <app-id>';

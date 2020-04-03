@@ -1,6 +1,6 @@
 import { Arguments, Argv } from 'yargs';
 import { table } from 'table';
-import { UPSAdminClientFactory } from '../UPSAdminClientFactory';
+import { UPSAdminClientFactory } from '../../utils/UPSAdminClientFactory';
 exports.command = 'create';
 
 exports.describe = 'create a new application';

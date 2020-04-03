@@ -3,7 +3,7 @@ import { AndroidVariant, Variant } from '@aerogear/unifiedpush-admin-client';
 import { VariantHandler } from './VariantHandler';
 import { VariantDef } from './VariantDef';
 import * as inquirer from 'inquirer';
-import { UPSAdminClientFactory } from '../../UPSAdminClientFactory';
+import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
 
 export class AndroidVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [
