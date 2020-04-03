@@ -27,7 +27,7 @@
     "@types/inquirer": "6.5.0",
     "@types/jest": "25.1.5",
     "@types/node": "10.17.17",
-    "@types/table": "4.0.7",
+    "@types/table": "5.0.0",
     "@types/urlsafe-base64": "1.0.28",
     "@types/yargs": "15.0.4",
     "gts": "1.1.2",
