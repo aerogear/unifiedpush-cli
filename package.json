@@ -1,6 +1,6 @@
 {
-  "name": "unifiedpush-cli",
-  "version": "0.0.1-alpha",
+  "name": "@aerogear/unifiedpush-cli",
+  "version": "0.0.1-alpha.0",
   "description": "UnifiedPush Server CLI client",
   "main": "build/src/index.js",
   "bin": {
@@ -11,7 +11,10 @@
     "build/src"
   ],
   "license": "Apache-2.0",
-  "keywords": ["aerogear", "unifiedpush" ],
+  "keywords": [
+    "aerogear",
+    "unifiedpush"
+  ],
   "scripts": {
     "test": "jest",
     "check": "gts check",
