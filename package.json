@@ -11,7 +11,7 @@
     "build/src"
   ],
   "license": "Apache-2.0",
-  "keywords": [],
+  "keywords": ["aerogear", "unifiedpush" ],
   "scripts": {
     "test": "jest",
     "check": "gts check",
