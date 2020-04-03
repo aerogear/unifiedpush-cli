@@ -16,7 +16,7 @@ To run the UnifiedPush Client you will need to have [node](https://nodejs.org/) 
 
 Run 
 ```bash
-npm install -g unifiedpush-cli
+npm install -g @aerogear/unifiedpush-cli
 ```
 
 That will install the latest version of the _UnifiedPush Client CLI_ in your machine.
