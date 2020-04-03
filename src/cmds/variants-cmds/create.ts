@@ -26,34 +26,38 @@ exports.builder = (yargs: Argv) => {
 };
 
 exports.handler = async (argv: Arguments<VariantDef>) => {
-  const variantDef = argv.def ? JSON.parse(argv.def) : {};
+  try {
+    const variantDef = argv.def ? JSON.parse(argv.def) : {};
 
-  const questions: Array<{}> = [
-    {
-      name: 'name',
-      type: 'input',
-      message: 'Variant name:',
-      when: () => !variantDef?.name,
-    },
-    {
-      name: 'type',
-      type: 'list',
-      message: 'Type:',
-      choices: ['android', 'ios', 'ios_token', 'web_push'],
-      when: () => !variantDef?.type,
-      //validate: (answer: string) => answer.trim().length > 0
-    },
-  ];
+    const questions: Array<{}> = [
+      {
+        name: 'name',
+        type: 'input',
+        message: 'Variant name:',
+        when: () => !variantDef?.name,
+      },
+      {
+        name: 'type',
+        type: 'list',
+        message: 'Type:',
+        choices: ['android', 'ios', 'ios_token', 'web_push'],
+        when: () => !variantDef?.type,
+        //validate: (answer: string) => answer.trim().length > 0
+      },
+    ];
 
-  const answers = { ...((await inquirer.prompt(questions)) as VariantDef), ...variantDef };
+    const answers = { ...((await inquirer.prompt(questions)) as VariantDef), ...variantDef };
 
-  const variant = await VariantHandlerFactory.getInquirer(answers.type).handle(argv, answers);
+    const variant = await VariantHandlerFactory.getInquirer(answers.type).handle(argv, answers);
 
-  console.log('Variant created');
-  console.log(
-    table([
-      ['NAME', 'VARIANT-ID', 'TYPE'],
-      [variant.name, variant.variantID, variant.type],
-    ])
-  );
+    console.log('Variant created');
+    console.log(
+      table([
+        ['NAME', 'VARIANT-ID', 'TYPE'],
+        [variant.name, variant.variantID, variant.type],
+      ])
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };

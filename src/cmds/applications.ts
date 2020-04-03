@@ -5,7 +5,7 @@ exports.describe = 'manage the applications';
 
 exports.builder = (yargs: Argv) => {
   return yargs
-    .commandDir('app-cmds')
+    .commandDir('./app-cmds', { extensions: process.env.upscli_test ? ['js', 'ts'] : ['js'] })
     .demandCommand()
     .help();
 };

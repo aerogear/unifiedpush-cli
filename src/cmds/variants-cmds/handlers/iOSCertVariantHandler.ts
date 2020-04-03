@@ -3,7 +3,7 @@ import { Arguments } from 'yargs';
 import { IOSVariant, Variant } from '@aerogear/unifiedpush-admin-client';
 import { VariantDef } from './VariantDef';
 import * as inquirer from 'inquirer';
-import { UPSAdminClientFactory } from '../../UPSAdminClientFactory';
+import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
 import * as fs from 'fs';
 
 export class IOSCertVariantHandler implements VariantHandler {

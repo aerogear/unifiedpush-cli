@@ -4,7 +4,7 @@ import { IOSTokenVariant, Variant } from '@aerogear/unifiedpush-admin-client';
 import { fileToString } from './utils';
 import { VariantDef } from './VariantDef';
 import * as inquirer from 'inquirer';
-import { UPSAdminClientFactory } from '../../UPSAdminClientFactory';
+import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
 
 export class IOSTokenVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [

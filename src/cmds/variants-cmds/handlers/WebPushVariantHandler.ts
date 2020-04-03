@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import * as urlBase64 from 'urlsafe-base64';
 import { VariantHandler } from './VariantHandler';
 import { Variant } from '@aerogear/unifiedpush-admin-client';
-import { UPSAdminClientFactory } from '../../UPSAdminClientFactory';
+import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
 import { VariantDef } from './VariantDef';
 import { WebPushVariant } from '@aerogear/unifiedpush-admin-client/dist/src/variants';
 
