@@ -40,7 +40,7 @@
     "typescript": "3.8.3"
   },
   "dependencies": {
-    "@aerogear/unifiedpush-admin-client": "0.1.3",
+    "@aerogear/unifiedpush-admin-client": "0.1.4",
     "figlet": "^1.3.0",
     "inquirer": "^7.1.0",
     "table": "^5.4.6",
