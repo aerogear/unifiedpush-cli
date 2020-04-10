@@ -1,5 +1,5 @@
-import { UnifiedPushAdminClient } from '@aerogear/unifiedpush-admin-client';
-import { Arguments } from 'yargs';
+import {UnifiedPushAdminClient} from '@aerogear/unifiedpush-admin-client';
+import {Arguments} from 'yargs';
 import {
   BasicCredentials,
   KeycloakCredentials,
@@ -12,7 +12,11 @@ export class UPSAdminClientFactory {
     return type === 'basic'
       ? new UnifiedPushAdminClient(
           argv.url as string,
-          { username: argv.username as string, password: argv.password as string, type: 'basic' } as BasicCredentials
+          {
+            username: argv.username as string,
+            password: argv.password as string,
+            type: 'basic',
+          } as BasicCredentials
         )
       : new UnifiedPushAdminClient(
           argv.url as string,

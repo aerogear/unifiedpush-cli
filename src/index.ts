@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 import * as yargs from 'yargs';
-import { Argv } from 'yargs';
+import {Argv} from 'yargs';
 
 const keyCloakOptions = (yargs: Argv): Argv => {
   return yargs
-    .group(['username', 'password', 'kc-url', 'realm', 'client-id', 'auth-type'], 'Keycloak Auth:')
+    .group(
+      ['username', 'password', 'kc-url', 'realm', 'client-id', 'auth-type'],
+      'Keycloak Auth:'
+    )
     .option('k', {
       alias: 'kc-url',
       required: false,
@@ -59,7 +62,7 @@ const authOptions = (yargs: Argv): Argv => {
   return keyCloakOptions(res);
 };
 
-const argv = authOptions(yargs)
+authOptions(yargs)
   .demandCommand()
   .option('U', {
     alias: 'url',
@@ -72,14 +75,15 @@ const argv = authOptions(yargs)
   .alias('v', 'version')
   .commandDir('cmds')
   .strict()
-  .fail((msg, err, yargs) => {
+  .fail((msg, err) => {
     console.log('ERROR -', msg || err);
     if (msg) {
-      console.log(`ups: try 'ups --help' for more information`);
+      console.log("ups: try 'ups --help' for more information");
     }
+    /* eslint-disable-next-line no-process-exit */
     process.exit(1);
   })
   .showHelpOnFail(false)
   .exitProcess(true)
-    .usage('$0 --url <url> [auth] <command>')
+  .usage('$0 --url <url> [auth] <command>')
   .parse();

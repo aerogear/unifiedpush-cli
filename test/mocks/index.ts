@@ -1,3 +1,9 @@
-export { ConsoleMock } from './ConsoleMock';
-export { UnifiedPushAdminClientMock, AdminClientMock } from './MockUnifiedPushAdminClient';
-export { MockedVariantHandlerFactory, MockedVariantHandler } from './MockVariantsHandlerFactory';
+export {ConsoleMock} from './ConsoleMock';
+export {
+  UnifiedPushAdminClientMock,
+  AdminClientMock,
+} from './MockUnifiedPushAdminClient';
+export {
+  MockedVariantHandlerFactory,
+  MockedVariantHandler,
+} from './MockVariantsHandlerFactory';

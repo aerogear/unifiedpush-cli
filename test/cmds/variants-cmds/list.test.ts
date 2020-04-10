@@ -1,8 +1,8 @@
-import { Arguments } from 'yargs';
-import { UnifiedPushAdminClientMock } from '../../mocks/MockUnifiedPushAdminClient';
-import { ConsoleMock } from '../../mocks/ConsoleMock';
-import { handler } from '../../../src/cmds/variants-cmds/list';
-import { VariantFilter } from '@aerogear/unifiedpush-admin-client';
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
+import {Arguments} from 'yargs';
+import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
+import {handler} from '../../../src/cmds/variants-cmds/list';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -24,15 +24,18 @@ describe('variants list', () => {
 ║ Variant 2 │ v-2:2      │ web_push ║
 ╚═══════════╧════════════╧══════════╝
 `;
-    // tslint:disable-next-line:ban-ts-ignore
     // @ts-ignore
-    await handler({ url: 'http://localhost:9999', appId: '2:2', _: [''], $0: '' } as Arguments);
+    await handler({
+      url: 'http://localhost:9999',
+      appId: '2:2',
+      _: [''],
+      $0: '',
+    } as Arguments);
     expect(ConsoleMock.log).toHaveBeenCalled();
     expect(ConsoleMock.log).toHaveBeenCalledWith(expectedResult);
   });
   it('Should return "no variants found"', async () => {
-    const filter: VariantFilter = { name: 'wrongname' };
-    // tslint:disable-next-line:ban-ts-ignore
+    const filter: VariantFilter = {name: 'wrongname'};
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',

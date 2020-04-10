@@ -1,8 +1,11 @@
-import { table } from 'table';
-import { Arguments, Argv } from 'yargs';
-import { PushApplication, PushApplicationFilter, UnifiedPushAdminClient } from '@aerogear/unifiedpush-admin-client';
-import { UPSAdminClientFactory } from '../../utils/UPSAdminClientFactory';
-import { normalizeFilter } from '../../utils/FilterUtils';
+import {table} from 'table';
+import {Arguments, Argv} from 'yargs';
+import {
+  PushApplication,
+  PushApplicationFilter,
+} from '@aerogear/unifiedpush-admin-client';
+import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
+import {normalizeFilter} from '../../utils/FilterUtils';
 
 export const command = 'list';
 
@@ -24,10 +27,15 @@ export const handler = async (argv: Arguments) => {
   const filter: PushApplicationFilter | undefined = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter as string))
     : undefined;
-  const apps = await UPSAdminClientFactory.getUpsAdminInstance(argv).applications.find(filter);
+  const apps = await UPSAdminClientFactory.getUpsAdminInstance(
+    argv
+  ).applications.find(filter);
   if (apps.length !== 0) {
     const tableData = apps.reduce(
-      (previousValue: string[][], currentValue: PushApplication): string[][] => {
+      (
+        previousValue: string[][],
+        currentValue: PushApplication
+      ): string[][] => {
         previousValue.push([
           currentValue.name,
           currentValue.pushApplicationID!,

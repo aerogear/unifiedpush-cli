@@ -1,9 +1,9 @@
-import { VariantHandler } from './VariantHandler';
-import { Arguments } from 'yargs';
-import { IOSVariant, Variant } from '@aerogear/unifiedpush-admin-client';
-import { VariantDef } from './VariantDef';
+import {VariantHandler} from './VariantHandler';
+import {Arguments} from 'yargs';
+import {IOSVariant, Variant} from '@aerogear/unifiedpush-admin-client';
+import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
-import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
+import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
 import * as fs from 'fs';
 
 export class IOSCertVariantHandler implements VariantHandler {
@@ -12,7 +12,8 @@ export class IOSCertVariantHandler implements VariantHandler {
       name: 'certificate',
       type: 'input',
       message: 'Path to your P12 file:',
-      validate: (path: string) => (fs.existsSync(path) ? true : 'Specified path do not exists'),
+      validate: (path: string) =>
+        fs.existsSync(path) ? true : 'Specified path do not exists',
       when: () => !def.certificate,
     },
     {
@@ -35,7 +36,7 @@ export class IOSCertVariantHandler implements VariantHandler {
 
     return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
       argv.appId as string,
-      { ...answers, ...def } as IOSVariant
+      {...answers, ...def} as IOSVariant
     );
   }
 }

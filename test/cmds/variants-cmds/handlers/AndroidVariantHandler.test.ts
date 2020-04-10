@@ -1,7 +1,6 @@
-import { AndroidVariant, WebPushVariant } from '@aerogear/unifiedpush-admin-client/dist/src/variants';
-import { UnifiedPushAdminClientMock } from '../../../mocks';
-import { WebPushVariantHandler } from '../../../../src/cmds/variants-cmds/handlers/WebPushVariantHandler';
-import { AndroidVariantHandler } from '../../../../src/cmds/variants-cmds/handlers/AndroidVariantHandler';
+import {AndroidVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {UnifiedPushAdminClientMock} from '../../../mocks';
+import {AndroidVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/AndroidVariantHandler';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -12,7 +11,7 @@ describe('AndroidVariantHandler', () => {
   it('Should have everything to create an AndroidVariant', async () => {
     const handler = new AndroidVariantHandler();
     const variant = (await handler.handle(
-      { 'auth-type': 'basic', url: 'http://localhost:9999', _: [''], $0: '' },
+      {'auth-type': 'basic', url: 'http://localhost:9999', _: [''], $0: ''},
       {
         name: 'test',
         googleKey: 'TEST-GOOGLE-KEY',

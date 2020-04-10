@@ -1,5 +1,6 @@
-import { UnifiedPushAdminClientMock, ConsoleMock } from '../../mocks';
-import { handler } from '../../../src/cmds/app-cmds/list';
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
+import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
+import {handler} from '../../../src/cmds/app-cmds/list';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -13,9 +14,8 @@ afterEach(() => {
 
 describe('applications', () => {
   it('Should list all applications', async () => {
-    // tslint:disable-next-line:ban-ts-ignore
     // @ts-ignore
-    await handler({ url: 'http://localhost:9999' });
+    await handler({url: 'http://localhost:9999'});
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
     expect(ConsoleMock.log).toHaveBeenCalledWith(
       `╔═══════════════╤═════════════════════╤══════════╗
@@ -34,10 +34,12 @@ describe('applications', () => {
   });
 
   it('Should return "no applications found"', async () => {
-    const filter = { name: 'wrong name' };
-    // tslint:disable-next-line:ban-ts-ignore
+    const filter = {name: 'wrong name'};
     // @ts-ignore
-    await handler({ url: 'http://localhost:9999', filter: JSON.stringify(filter) });
+    await handler({
+      url: 'http://localhost:9999',
+      filter: JSON.stringify(filter),
+    });
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
     expect(ConsoleMock.log).toHaveBeenCalledWith('No applications found');
   });

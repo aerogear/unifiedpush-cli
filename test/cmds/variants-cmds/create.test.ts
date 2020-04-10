@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {
   UnifiedPushAdminClientMock,
   MockedVariantHandlerFactory,
   MockedVariantHandler,
   ConsoleMock,
 } from '../../mocks';
-import { handler } from '../../../src/cmds/variants-cmds/create';
-import { AndroidVariant } from '@aerogear/unifiedpush-admin-client';
+import {handler} from '../../../src/cmds/variants-cmds/create';
+import {AndroidVariant} from '@aerogear/unifiedpush-admin-client';
 
 beforeAll(() => {
   MockedVariantHandlerFactory.initMock();
@@ -33,9 +34,12 @@ describe('variants create', () => {
       projectNumber: 'TEST-PROJECT-NUMBER',
     } as AndroidVariant;
 
-    const argv = { url: 'http://localhost:9999', appId: APP_ID, def: JSON.stringify(variantDef) };
+    const argv = {
+      url: 'http://localhost:9999',
+      appId: APP_ID,
+      def: JSON.stringify(variantDef),
+    };
 
-    // tslint:disable-next-line:ban-ts-ignore
     // @ts-ignore
     await handler(argv);
     expect(MockedVariantHandler.handle).toHaveBeenCalledWith(argv, variantDef);

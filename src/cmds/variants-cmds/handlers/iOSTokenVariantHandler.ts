@@ -1,10 +1,10 @@
-import { VariantHandler } from './VariantHandler';
-import { Arguments } from 'yargs';
-import { IOSTokenVariant, Variant } from '@aerogear/unifiedpush-admin-client';
-import { fileToString } from './utils';
-import { VariantDef } from './VariantDef';
+import {VariantHandler} from './VariantHandler';
+import {Arguments} from 'yargs';
+import {IOSTokenVariant, Variant} from '@aerogear/unifiedpush-admin-client';
+import {fileToString} from './utils';
+import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
-import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
+import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
 
 export class IOSTokenVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [
@@ -19,14 +19,16 @@ export class IOSTokenVariantHandler implements VariantHandler {
       name: 'keyId',
       type: 'input',
       message: 'Key Id:',
-      validate: (keyId: string) => keyId.length === 10 || 'Key ID must be 10 characters long',
+      validate: (keyId: string) =>
+        keyId.length === 10 || 'Key ID must be 10 characters long',
       when: () => !def.keyId,
     },
     {
       name: 'teamId',
       type: 'input',
       message: 'Team Id:',
-      validate: (teamId: string) => teamId.length === 10 || 'Team ID must be 10 characters long',
+      validate: (teamId: string) =>
+        teamId.length === 10 || 'Team ID must be 10 characters long',
       when: () => !def.teamId,
     },
     {
@@ -48,7 +50,7 @@ export class IOSTokenVariantHandler implements VariantHandler {
 
     return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
       argv.appId as string,
-      { ...answers, ...def } as IOSTokenVariant
+      {...answers, ...def} as IOSTokenVariant
     );
   }
 }
