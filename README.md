@@ -1,7 +1,7 @@
 # UnifiedPush Client CLI
 
 ![Build](https://github.com/aerogear/unifiedpush-cli/workflows/build/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/aerogear/unifiedpush-cli/badge.svg)](https://coveralls.io/github/aerogear/unifiedpush-cli)
+[![Coverage Status](https://coveralls.io/repos/github/aerogear/unifiedpush-cli/badge.svg?branch=master)](https://coveralls.io/github/aerogear/unifiedpush-cli)
 
 The UnifiedPush Client CLI makes it easy to interact with the UnifiedPush Server from the command line.
 
