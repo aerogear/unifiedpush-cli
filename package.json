@@ -2,6 +2,9 @@
   "name": "@aerogear/unifiedpush-cli",
   "version": "0.0.1-alpha.2",
   "description": "UnifiedPush Server CLI client",
+  "author": "AeroGear Team<aerogear@googlegroups.com>",
+  "homepage": "http://aerogear.org",
+  "license": "Apache-2.0",
   "main": "build/src/index.js",
   "bin": {
     "ups": "./build/src/index.js"
@@ -10,7 +13,6 @@
   "files": [
     "build/src"
   ],
-  "license": "Apache-2.0",
   "keywords": [
     "aerogear",
     "unifiedpush"
@@ -47,5 +49,12 @@
     "table": "^5.4.6",
     "urlsafe-base64": "^1.0.0",
     "yargs": "^15.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aerogear/unifiedpush-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aerogear/unifiedpush-cli/issues"
   }
 }
