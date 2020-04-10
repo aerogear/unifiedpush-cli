@@ -1,8 +1,8 @@
-import { VariantHandler } from './VariantHandler';
-import { WebPushVariantHandler } from './WebPushVariantHandler';
-import { AndroidVariantHandler } from './AndroidVariantHandler';
-import { IOSTokenVariantHandler } from './iOSTokenVariantHandler';
-import { IOSCertVariantHandler } from './iOSCertVariantHandler';
+import {VariantHandler} from './VariantHandler';
+import {WebPushVariantHandler} from './WebPushVariantHandler';
+import {AndroidVariantHandler} from './AndroidVariantHandler';
+import {IOSTokenVariantHandler} from './iOSTokenVariantHandler';
+import {IOSCertVariantHandler} from './iOSCertVariantHandler';
 
 export abstract class VariantHandlerFactory {
   static getHandler(type: string): VariantHandler {

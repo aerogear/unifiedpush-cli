@@ -1,2 +1,2 @@
-export { VariantHandlerFactory } from './VariantHandlerFactory';
-export { VariantHandler } from './VariantHandler';
+export {VariantHandlerFactory} from './VariantHandlerFactory';
+export {VariantHandler} from './VariantHandler';

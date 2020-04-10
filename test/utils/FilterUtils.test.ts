@@ -1,4 +1,4 @@
-import { normalizeFilter } from '../../src/utils/FilterUtils';
+import {normalizeFilter} from '../../src/utils/FilterUtils';
 
 describe('FilterUtils', () => {
   it('Should normalize all filters', () => {

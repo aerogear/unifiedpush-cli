@@ -1,5 +1,10 @@
-import { AndroidVariant, IOSTokenVariant, IOSVariant, PushApplication } from '@aerogear/unifiedpush-admin-client';
-import { WebPushVariant } from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {
+  AndroidVariant,
+  IOSTokenVariant,
+  IOSVariant,
+  PushApplication,
+} from '@aerogear/unifiedpush-admin-client';
+import {WebPushVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
 
 export const mockData: PushApplication[] = [
   {

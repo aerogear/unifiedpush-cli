@@ -1,9 +1,9 @@
-import { Arguments } from 'yargs';
-import { AndroidVariant, Variant } from '@aerogear/unifiedpush-admin-client';
-import { VariantHandler } from './VariantHandler';
-import { VariantDef } from './VariantDef';
+import {Arguments} from 'yargs';
+import {AndroidVariant, Variant} from '@aerogear/unifiedpush-admin-client';
+import {VariantHandler} from './VariantHandler';
+import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
-import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
+import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
 
 export class AndroidVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [
@@ -11,24 +11,24 @@ export class AndroidVariantHandler implements VariantHandler {
       name: 'googleKey',
       type: 'input',
       message: 'Server Key:',
-      when: (argv: Arguments) => !def.googleKey && def.type === 'android',
+      when: () => !def.googleKey && def.type === 'android',
     },
     {
       name: 'projectNumber',
       type: 'input',
       message: 'Sender ID:',
-      when: (argv: Arguments) => !def.projectNumber && def.type === 'android',
+      when: () => !def.projectNumber && def.type === 'android',
     },
   ];
 
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
 
-    const newVariant = await UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
+    return await UPSAdminClientFactory.getUpsAdminInstance(
+      argv
+    ).variants.create(
       argv.appId as string,
-      { ...answers, ...def } as AndroidVariant
+      {...answers, ...def} as AndroidVariant
     );
-
-    return newVariant;
   }
 }

@@ -1,8 +1,8 @@
-import { Arguments, Argv } from 'yargs';
+import {Arguments, Argv} from 'yargs';
 import * as inquirer from 'inquirer';
-import { table } from 'table';
-import { VariantHandlerFactory } from './handlers';
-import { VariantDef } from './handlers/VariantDef';
+import {table} from 'table';
+import {VariantHandlerFactory} from './handlers';
+import {VariantDef} from './handlers/VariantDef';
 
 export const command = 'create';
 
@@ -45,9 +45,15 @@ export const handler = async (argv: Arguments<VariantDef>) => {
     },
   ];
 
-  const answers = { ...((await inquirer.prompt(questions)) as VariantDef), ...variantDef };
+  const answers = {
+    ...((await inquirer.prompt(questions)) as VariantDef),
+    ...variantDef,
+  };
 
-  const variant = await VariantHandlerFactory.getHandler(answers.type).handle(argv, answers);
+  const variant = await VariantHandlerFactory.getHandler(answers.type).handle(
+    argv,
+    answers
+  );
 
   console.log('Variant created');
   console.log(

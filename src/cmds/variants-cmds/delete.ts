@@ -1,8 +1,8 @@
-import { Arguments, Argv } from 'yargs';
-import { VariantFilter } from '@aerogear/unifiedpush-admin-client';
-import { UPSAdminClientFactory } from '../../utils/UPSAdminClientFactory';
+import {Arguments, Argv} from 'yargs';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client';
+import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
 import * as inquirer from 'inquirer';
-import { normalizeFilter } from '../../utils/FilterUtils';
+import {normalizeFilter} from '../../utils/FilterUtils';
 
 export const command = 'delete';
 
@@ -20,15 +20,20 @@ export const builder = (yargs: Argv) => {
     .option('filter', {
       required: false,
       type: 'string',
-      describe: 'A filter to select the variant(s) to be deleted. If not specified, all variants will be deleted.',
+      describe:
+        'A filter to select the variant(s) to be deleted. If not specified, all variants will be deleted.',
       requiresArg: true,
     })
     .help();
 };
 
 export const handler = async (argv: Arguments<Record<string, string>>) => {
-  const filter: VariantFilter | undefined = argv.filter ? normalizeFilter(JSON.parse(argv.filter)) : undefined;
-  const variants = await UPSAdminClientFactory.getUpsAdminInstance(argv).variants.find(argv.appId, filter);
+  const filter: VariantFilter | undefined = argv.filter
+    ? normalizeFilter(JSON.parse(argv.filter))
+    : undefined;
+  const variants = await UPSAdminClientFactory.getUpsAdminInstance(
+    argv
+  ).variants.find(argv.appId, filter);
   const questions: Array<{}> = [
     {
       name: 'confirm',
@@ -40,7 +45,11 @@ export const handler = async (argv: Arguments<Record<string, string>>) => {
 
   const answers: Record<string, string> = await inquirer.prompt(questions);
   if (answers.confirm) {
-    const deletedVariants = await UPSAdminClientFactory.getUpsAdminInstance(argv).variants.delete(argv.appId, filter);
-    console.log(`${deletedVariants.filter(variant => variant).length} variant(s) deleted`);
+    const deletedVariants = await UPSAdminClientFactory.getUpsAdminInstance(
+      argv
+    ).variants.delete(argv.appId, filter);
+    console.log(
+      `${deletedVariants.filter(variant => variant).length} variant(s) deleted`
+    );
   }
 };

@@ -1,12 +1,12 @@
-import { Arguments } from 'yargs';
+import {Arguments} from 'yargs';
 import * as inquirer from 'inquirer';
 import * as crypto from 'crypto';
 import * as urlBase64 from 'urlsafe-base64';
-import { VariantHandler } from './VariantHandler';
-import { Variant } from '@aerogear/unifiedpush-admin-client';
-import { UPSAdminClientFactory } from '../../../utils/UPSAdminClientFactory';
-import { VariantDef } from './VariantDef';
-import { WebPushVariant } from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {VariantHandler} from './VariantHandler';
+import {Variant} from '@aerogear/unifiedpush-admin-client';
+import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
+import {VariantDef} from './VariantDef';
+import {WebPushVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
 
 export class WebPushVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [
@@ -51,7 +51,11 @@ export class WebPushVariantHandler implements VariantHandler {
 
     return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
       argv.appId as string,
-      { ...answers, ...def, ...WebPushVariantHandler.generateVAPIDKeys() } as WebPushVariant
+      {
+        ...answers,
+        ...def,
+        ...WebPushVariantHandler.generateVAPIDKeys(),
+      } as WebPushVariant
     );
   }
 }

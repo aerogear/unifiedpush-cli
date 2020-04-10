@@ -1,5 +1,7 @@
-export const normalizeFilter = (filter: { [key: string]: string }): { [key: string]: string } => {
-  const res: { [key: string]: string } = {};
+export const normalizeFilter = (filter: {
+  [key: string]: string;
+}): {[key: string]: string} => {
+  const res: {[key: string]: string} = {};
   Object.keys(filter).forEach((key: string) => {
     switch (key.toLowerCase()) {
       case 'name':

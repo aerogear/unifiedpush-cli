@@ -1,6 +1,6 @@
-import { IOSTokenVariant } from '@aerogear/unifiedpush-admin-client/dist/src/variants';
-import { UnifiedPushAdminClientMock } from '../../../mocks/MockUnifiedPushAdminClient';
-import { IOSTokenVariantHandler } from '../../../../src/cmds/variants-cmds/handlers/iOSTokenVariantHandler';
+import {IOSTokenVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {UnifiedPushAdminClientMock} from '../../../mocks/MockUnifiedPushAdminClient';
+import {IOSTokenVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/iOSTokenVariantHandler';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -11,7 +11,7 @@ describe('IOSTokenVaraintHandler', () => {
   it('Should have everything to create a iOSTokenVariant', async () => {
     const handler = new IOSTokenVariantHandler();
     const variant = (await handler.handle(
-      { 'auth-type': 'basic', url: 'http://localhost:9999', _: [''], $0: '' },
+      {'auth-type': 'basic', url: 'http://localhost:9999', _: [''], $0: ''},
       {
         name: 'test-ios-token',
         teamId: 'MyTeamID',
