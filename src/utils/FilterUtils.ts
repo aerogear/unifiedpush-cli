@@ -11,6 +11,9 @@ export const normalizeFilter = (filter: { [key: string]: string }): { [key: stri
       case 'type':
         res['type'] = filter[key];
         break;
+      case 'push-application-id':
+        res['pushApplicationID'] = filter[key];
+        break;
       default:
         res[key] = filter[key];
     }

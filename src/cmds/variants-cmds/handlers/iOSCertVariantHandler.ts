@@ -26,7 +26,7 @@ export class IOSCertVariantHandler implements VariantHandler {
       name: 'production',
       type: 'confirm',
       message: 'Is this a production certificate?',
-      when: () => !def.production,
+      when: () => def.production === null || def.production === undefined,
     },
   ];
 

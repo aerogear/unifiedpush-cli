@@ -142,6 +142,7 @@ manage the variants
 
 Commands:
   ups variants create         create a new variant
+  ups variants delete         delete variant(s)
   ups variants list <app-id>  lists the variants for the application identified
                               by <app-id>
 
@@ -191,7 +192,7 @@ ups -U http://localhost:9999 variants list ecfe3c76-b547-4b1c-8f21-b08085c08c80
 ╚═════════╧══════════════════════════════════════╧══════════╝
 ```
 
-A filter can be specified to refine the serch. For example, to list only the `android` variants:
+A filter can be specified to refine the search. For example, to list only the `android` variants:
 
 ```bash
 ups -U http://localhost:9999 variants list ecfe3c76-b547-4b1c-8f21-b08085c08c80 --filter '{"type":"android"}'
@@ -270,6 +271,34 @@ Variant created
 * **name**: the variant name
 * **type**: must be `web_push`
 * **alias**: this must be in **URL** or **mailto** format.
+
+### Deleting variants
+
+To delete a list of variants for a given application, the `delete` sub-command is provided
+```bash
+ups variants delete --app-id <app-id> [--filter <filter>]
+```
+
+For example, to delete all the variants for the app with id `ecfe3c76-b547-4b1c-8f21-b08085c08c80` we will run:
+```bash
+ups -U http://localhost:9999 variants delete --app-id ecfe3c76-b547-4b1c-8f21-b08085c08c80      
+? 2 variant(s) will be deleted. Proceed? Yes
+2 variant(s) deleted
+```
+
+A filter can be specified to delete a subset of the variants. For example, to delete only the `android` variants:
+
+```bash
+ups -U http://localhost:9999 variants delete --app-id ecfe3c76-b547-4b1c-8f21-b08085c08c80  --filter '{"type":"android"}'
+? 1 variant(s) will be deleted. Proceed? Yes
+1 variant(s) deleted
+```
+
+The available keys for filtering are:
+* **name**
+* **variantID** : assigned by the server when creating a variant, uniquely identifies a single variant
+* **developer** : this is assigned automatically by the server based on the logged in user (defaults to 'admin' for non authenticated servers)
+* **type** : this can be _android_, _ios_, _ios_token_ or _web_push_
 
 ## Authentication
 As we can see from the _UnifiedPush Client Admin_ help, we currently supports two kind of authentications:

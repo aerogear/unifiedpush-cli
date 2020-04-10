@@ -1,24 +1,13 @@
 import * as yargs from 'yargs';
 
-import {
-  mockClear,
-  MockUnifiedPushAdminClient,
-  createVariantsMock,
-  findVariantsMock,
-} from '../mocks/MockUnifiedPushAdminClient';
+import { UnifiedPushAdminClientMock, AdminClientMock } from '../mocks/MockUnifiedPushAdminClient';
 import { AndroidVariant } from '@aerogear/unifiedpush-admin-client';
 
 process.env.upscli_test = 'true';
 
-jest.mock('@aerogear/unifiedpush-admin-client', () => {
-  return {
-    UnifiedPushAdminClient: MockUnifiedPushAdminClient,
-  };
-});
-
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
-  mockClear();
+  UnifiedPushAdminClientMock.mockClear();
 });
 
 const appId = 'd43c8d2b-64a8-41ee-abc8-1a15aa8dc4ec';
@@ -36,8 +25,8 @@ describe('variants list', () => {
       );
     });
 
-    expect(findVariantsMock).toHaveBeenCalledTimes(1);
-    expect(findVariantsMock).toHaveBeenCalledWith(appId, undefined);
+    expect(AdminClientMock.variants.find).toHaveBeenCalledTimes(1);
+    expect(AdminClientMock.variants.find).toHaveBeenCalledWith(appId, undefined);
   });
 
   it('should call find with a filter', async () => {
@@ -54,8 +43,8 @@ describe('variants list', () => {
       );
     });
 
-    expect(findVariantsMock).toHaveBeenCalledTimes(1);
-    expect(findVariantsMock).toHaveBeenCalledWith(appId, filter);
+    expect(AdminClientMock.variants.find).toHaveBeenCalledTimes(1);
+    expect(AdminClientMock.variants.find).toHaveBeenCalledWith(appId, filter);
   });
 });
 
@@ -91,7 +80,7 @@ describe('Variant Create', () => {
 
     await wait(1);
 
-    expect(createVariantsMock).toHaveBeenCalledTimes(1);
-    expect(createVariantsMock).toHaveBeenCalledWith(appId, androidVariant);
+    expect(AdminClientMock.variants.create).toHaveBeenCalledTimes(1);
+    expect(AdminClientMock.variants.create).toHaveBeenCalledWith(appId, androidVariant);
   });
 });

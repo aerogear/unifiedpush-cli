@@ -5,7 +5,7 @@ import { IOSTokenVariantHandler } from './iOSTokenVariantHandler';
 import { IOSCertVariantHandler } from './iOSCertVariantHandler';
 
 export abstract class VariantHandlerFactory {
-  static getInquirer(type: string): VariantHandler {
+  static getHandler(type: string): VariantHandler {
     switch (type) {
       case 'web_push':
         return new WebPushVariantHandler();

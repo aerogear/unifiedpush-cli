@@ -1,11 +1,11 @@
 import { Arguments, Argv } from 'yargs';
 import { table } from 'table';
 import { UPSAdminClientFactory } from '../../utils/UPSAdminClientFactory';
-exports.command = 'create';
+export const command = 'create';
 
-exports.describe = 'create a new application';
+export const describe = 'create a new application';
 
-exports.builder = (yargs: Argv) => {
+export const builder = (yargs: Argv) => {
   return yargs
     .group(['name'], 'Create application:')
     .option('name', {
@@ -18,7 +18,7 @@ exports.builder = (yargs: Argv) => {
     .help();
 };
 
-exports.handler = async (argv: Arguments) => {
+export const handler = async (argv: Arguments) => {
   const app = await UPSAdminClientFactory.getUpsAdminInstance(argv).applications.create(argv.name as string);
 
   console.log('Application created successfully');

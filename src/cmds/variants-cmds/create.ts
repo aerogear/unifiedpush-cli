@@ -3,11 +3,12 @@ import * as inquirer from 'inquirer';
 import { table } from 'table';
 import { VariantHandlerFactory } from './handlers';
 import { VariantDef } from './handlers/VariantDef';
-exports.command = 'create';
 
-exports.describe = 'create a new variant';
+export const command = 'create';
 
-exports.builder = (yargs: Argv) => {
+export const describe = 'create a new variant';
+
+export const builder = (yargs: Argv) => {
   return yargs
     .group(['app-id'], 'Create Variant:')
     .option('app-id', {
@@ -25,39 +26,34 @@ exports.builder = (yargs: Argv) => {
     .help();
 };
 
-exports.handler = async (argv: Arguments<VariantDef>) => {
-  try {
-    const variantDef = argv.def ? JSON.parse(argv.def) : {};
+export const handler = async (argv: Arguments<VariantDef>) => {
+  const variantDef = argv.def ? JSON.parse(argv.def) : {};
 
-    const questions: Array<{}> = [
-      {
-        name: 'name',
-        type: 'input',
-        message: 'Variant name:',
-        when: () => !variantDef?.name,
-      },
-      {
-        name: 'type',
-        type: 'list',
-        message: 'Type:',
-        choices: ['android', 'ios', 'ios_token', 'web_push'],
-        when: () => !variantDef?.type,
-        //validate: (answer: string) => answer.trim().length > 0
-      },
-    ];
+  const questions: Array<{}> = [
+    {
+      name: 'name',
+      type: 'input',
+      message: 'Variant name:',
+      when: () => !variantDef?.name,
+    },
+    {
+      name: 'type',
+      type: 'list',
+      message: 'Type:',
+      choices: ['android', 'ios', 'ios_token', 'web_push'],
+      when: () => !variantDef?.type,
+    },
+  ];
 
-    const answers = { ...((await inquirer.prompt(questions)) as VariantDef), ...variantDef };
+  const answers = { ...((await inquirer.prompt(questions)) as VariantDef), ...variantDef };
 
-    const variant = await VariantHandlerFactory.getInquirer(answers.type).handle(argv, answers);
+  const variant = await VariantHandlerFactory.getHandler(answers.type).handle(argv, answers);
 
-    console.log('Variant created');
-    console.log(
-      table([
-        ['NAME', 'VARIANT-ID', 'TYPE'],
-        [variant.name, variant.variantID, variant.type],
-      ])
-    );
-  } catch (err) {
-    console.log(err);
-  }
+  console.log('Variant created');
+  console.log(
+    table([
+      ['NAME', 'VARIANT-ID', 'TYPE'],
+      [variant.name, variant.variantID, variant.type],
+    ])
+  );
 };

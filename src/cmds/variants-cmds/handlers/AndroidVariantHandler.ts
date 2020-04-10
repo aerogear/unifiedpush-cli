@@ -24,9 +24,11 @@ export class AndroidVariantHandler implements VariantHandler {
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
 
-    return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
+    const newVariant = await UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
       argv.appId as string,
       { ...answers, ...def } as AndroidVariant
     );
+
+    return newVariant;
   }
 }
