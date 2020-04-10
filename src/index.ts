@@ -75,9 +75,11 @@ const argv = authOptions(yargs)
   .fail((msg, err, yargs) => {
     console.log('ERROR -', msg || err);
     if (msg) {
-      console.log(`ups: try '--help' for more information`);
+      console.log(`ups: try 'ups --help' for more information`);
     }
-    //process.exit(1);
+    process.exit(1);
   })
   .showHelpOnFail(false)
+  .exitProcess(true)
+    .usage('$0 --url <url> [auth] <command>')
   .parse();
