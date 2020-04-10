@@ -2,12 +2,13 @@ import { table } from 'table';
 import { Arguments, Argv } from 'yargs';
 import { PushApplication, PushApplicationFilter, UnifiedPushAdminClient } from '@aerogear/unifiedpush-admin-client';
 import { UPSAdminClientFactory } from '../../utils/UPSAdminClientFactory';
+import { normalizeFilter } from '../../utils/FilterUtils';
 
-exports.command = 'list';
+export const command = 'list';
 
-exports.describe = 'lists the applications';
+export const describe = 'lists the applications';
 
-exports.builder = (yargs: Argv) => {
+export const builder = (yargs: Argv) => {
   return yargs
     .group('filter', 'Applications list:')
     .option('filter', {
@@ -19,25 +20,7 @@ exports.builder = (yargs: Argv) => {
     .help();
 };
 
-const normalizeFilter = (filter: { [key: string]: string }): { [key: string]: string } => {
-  const res: { [key: string]: string } = {};
-  Object.keys(filter).forEach((key: string) => {
-    switch (key.toLowerCase()) {
-      case 'name':
-        res['name'] = filter[key];
-        break;
-      case 'push-application-id':
-        res['pushApplicationID'] = filter[key];
-        break;
-      default:
-        res[key] = filter[key];
-    }
-  });
-
-  return res;
-};
-
-exports.handler = async (argv: Arguments) => {
+export const handler = async (argv: Arguments) => {
   const filter: PushApplicationFilter | undefined = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter as string))
     : undefined;

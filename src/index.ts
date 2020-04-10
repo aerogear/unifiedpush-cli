@@ -77,7 +77,7 @@ const argv = authOptions(yargs)
     if (msg) {
       console.log(`ups: try '--help' for more information`);
     }
-    process.exit(1);
+    //process.exit(1);
   })
   .showHelpOnFail(false)
   .parse();

@@ -18,7 +18,7 @@ export class WebPushVariantHandler implements VariantHandler {
     },
   ];
 
-  private generateVAPIDKeys() {
+  private static generateVAPIDKeys() {
     const curve = crypto.createECDH('prime256v1');
     curve.generateKeys();
 
@@ -51,7 +51,7 @@ export class WebPushVariantHandler implements VariantHandler {
 
     return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
       argv.appId as string,
-      { ...answers, ...def, ...this.generateVAPIDKeys() } as WebPushVariant
+      { ...answers, ...def, ...WebPushVariantHandler.generateVAPIDKeys() } as WebPushVariant
     );
   }
 }
