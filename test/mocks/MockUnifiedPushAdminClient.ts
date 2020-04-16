@@ -1,6 +1,6 @@
 import {
   PushApplication,
-  PushApplicationFilter,
+  PushApplicationSearchOptions,
   Variant,
 } from '@aerogear/unifiedpush-admin-client';
 import {mockData} from '../mockData';
@@ -8,7 +8,7 @@ import {applyPushApplicationFilter} from '@aerogear/unifiedpush-admin-client/dis
 import {applyVariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/variants/Variant';
 
 const findApplicationsMock = jest.fn(
-  (filter?: PushApplicationFilter): PushApplication[] => {
+  (filter?: PushApplicationSearchOptions): PushApplication[] => {
     return applyPushApplicationFilter(mockData, filter);
   }
 );

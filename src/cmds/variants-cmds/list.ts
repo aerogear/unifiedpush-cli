@@ -4,14 +4,20 @@ import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
 import {table} from 'table';
 import {normalizeFilter} from '../../utils/FilterUtils';
 
-exports.command = 'list <app-id>';
+exports.command = 'list';
 
 exports.describe =
   'lists the variants for the application identified by <app-id>';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group('filter', 'Variants list:')
+    .group(['filter', 'app-id'], 'Variants list:')
+    .option('app-id', {
+      required: true,
+      type: 'string',
+      describe: 'The application id',
+      requiresArg: true,
+    })
     .option('filter', {
       required: false,
       type: 'string',

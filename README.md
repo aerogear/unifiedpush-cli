@@ -122,6 +122,15 @@ Application created successfully
 ╚═══════════╧══════════════════════════════════════╝
 ```
 
+### Rename an existing app
+
+To rename an application in a given instance of the _UnifiedPush Server_ the `rename` sub-command should be used:
+
+```bash
+ups -U http://localhost:9999 applications rename --app-id ecfe3c76-b547-4b1c-8f21-b08085c08c80 --name newname
+Application renamed successfully
+```
+
 The command returns a table with the details of the just created application.
 
 ## Variants
