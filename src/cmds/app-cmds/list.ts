@@ -2,7 +2,7 @@ import {table} from 'table';
 import {Arguments, Argv} from 'yargs';
 import {
   PushApplication,
-  PushApplicationFilter,
+  PushApplicationSearchOptions,
 } from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
 import {normalizeFilter} from '../../utils/FilterUtils';
@@ -24,9 +24,13 @@ export const builder = (yargs: Argv) => {
 };
 
 export const handler = async (argv: Arguments) => {
-  const filter: PushApplicationFilter | undefined = argv.filter
+  const filter: PushApplicationSearchOptions = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter as string))
-    : undefined;
+    : {};
+
+  filter.includeActivity = true;
+  filter.includeDeviceCount = true;
+
   const apps = await UPSAdminClientFactory.getUpsAdminInstance(
     argv
   ).applications.find(filter);
@@ -40,10 +44,20 @@ export const handler = async (argv: Arguments) => {
           currentValue.name,
           currentValue.pushApplicationID!,
           `${currentValue.variants?.length || 0}`,
+          `${currentValue.deviceCount}`,
+          `${currentValue.activity}`,
         ]);
         return previousValue;
       },
-      [['NAME', 'PUSH-APPLICATION-ID', 'VARIANTS']]
+      [
+        [
+          'NAME',
+          'PUSH-APPLICATION-ID',
+          'VARIANTS',
+          'INSTALLATIONS',
+          'SENT-MESSAGES',
+        ],
+      ]
     );
     console.log(table(tableData));
   } else {

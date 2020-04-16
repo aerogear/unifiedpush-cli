@@ -62,6 +62,18 @@ const authOptions = (yargs: Argv): Argv => {
   return keyCloakOptions(res);
 };
 
+const extractErrorDetails = (msg: string, err: any): string => {
+  if (msg) {
+    return msg;
+  }
+
+  if (err.response?.data) {
+    return err.response.data;
+  }
+
+  return err.message;
+};
+
 authOptions(yargs)
   .demandCommand()
   .option('U', {
@@ -76,7 +88,7 @@ authOptions(yargs)
   .commandDir('cmds')
   .strict()
   .fail((msg, err) => {
-    console.log('ERROR -', msg || err);
+    console.log('ERROR -', extractErrorDetails(msg, err));
     if (msg) {
       console.log("ups: try 'ups --help' for more information");
     }
