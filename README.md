@@ -122,6 +122,27 @@ Application created successfully
 ╚═══════════╧══════════════════════════════════════╝
 ```
 
+### Deleting applications
+
+To delete a list of applications the `delete` sub-command is provided
+```bash
+ups applications delete [--filter <filter>]
+```
+
+For example, to delete all the applications named 'test' we will run:
+```bash
+ups -U http://localhost:9999 applications delete --filter '{"name": "test"}'      
+? 2 applications(s) will be deleted. Proceed? Yes
+2 applications(s) deleted
+```
+
+If no filter is specified, all the application will be deleted.
+
+The available keys for filtering are:
+* **name**
+* **pushApplicationID** : assigned by the server when creating an application, uniquely identifies a single application
+* **developer** : this is assigned automatically by the server based on the logged in user (defaults to 'admin' for non authenticated servers)
+
 ### Rename an existing app
 
 To rename an application in a given instance of the _UnifiedPush Server_ the `rename` sub-command should be used:
