@@ -35,7 +35,7 @@
     "@types/table": "5.0.0",
     "@types/urlsafe-base64": "1.0.28",
     "@types/yargs": "15.0.4",
-    "gts": "2.0.0",
+    "gts": "2.0.2",
     "jest": "26.0.1",
     "ts-jest": "25.5.0",
     "ts-node": "8.10.1",
