@@ -28,7 +28,7 @@ export const handler = async (argv: Arguments) => {
 
   const apps = await UPSAdminClientFactory.getUpsAdminInstance(
     argv
-  ).applications.find(filter);
+  ).applications.find({filter});
 
   if (apps.length !== 0) {
     const questions: Array<{}> = [

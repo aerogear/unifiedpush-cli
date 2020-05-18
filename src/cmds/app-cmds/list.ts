@@ -13,7 +13,13 @@ export const describe = 'lists the applications';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group('filter', 'Applications list:')
+    .group(['page', 'filter'], 'Applications list:')
+    .option('page', {
+      required: false,
+      type: 'number',
+      describe: 'page to be shown',
+      requiresArg: true,
+    })
     .option('filter', {
       required: false,
       type: 'string',
@@ -31,9 +37,10 @@ export const handler = async (argv: Arguments) => {
   filter.includeActivity = true;
   filter.includeDeviceCount = true;
 
+  const page: number = (argv.page as number) || 0;
   const apps = await UPSAdminClientFactory.getUpsAdminInstance(
     argv
-  ).applications.find(filter);
+  ).applications.find({filter, page});
   if (apps.length !== 0) {
     const tableData = apps.reduce(
       (
