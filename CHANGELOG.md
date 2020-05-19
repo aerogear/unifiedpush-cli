@@ -1,3 +1,7 @@
+## [0.2.3](https://github.com/aerogear/unifiedpush-cli/compare/0.2.2...0.2.3) (2020-05-19)
+
+
+
 ## [0.2.2](https://github.com/aerogear/unifiedpush-cli/compare/0.2.1...0.2.2) (2020-05-19)
 
 
