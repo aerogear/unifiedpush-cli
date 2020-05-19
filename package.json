@@ -1,6 +1,6 @@
 {
   "name": "@aerogear/unifiedpush-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "UnifiedPush Server CLI client",
   "author": "AeroGear Team<aerogear@googlegroups.com>",
   "homepage": "http://aerogear.org",
