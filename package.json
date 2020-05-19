@@ -34,7 +34,7 @@
     "@types/node": "10.17.21",
     "@types/table": "5.0.0",
     "@types/urlsafe-base64": "1.0.28",
-    "@types/yargs": "15.0.4",
+    "@types/yargs": "15.0.5",
     "gts": "2.0.2",
     "jest": "26.0.1",
     "ts-jest": "26.0.0",
