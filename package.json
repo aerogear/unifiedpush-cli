@@ -42,7 +42,7 @@
     "typescript": "3.9.5"
   },
   "dependencies": {
-    "@aerogear/unifiedpush-admin-client": "^2.0.0",
+    "@aerogear/unifiedpush-admin-client": "^4.0.0",
     "eslint-plugin-jest": "^23.8.2",
     "figlet": "^1.3.0",
     "inquirer": "^7.1.0",
