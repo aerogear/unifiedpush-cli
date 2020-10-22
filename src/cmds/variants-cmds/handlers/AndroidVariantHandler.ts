@@ -1,5 +1,5 @@
 import {Arguments} from 'yargs';
-import {AndroidVariant, Variant} from '@aerogear/unifiedpush-admin-client';
+import {Variant} from '@aerogear/unifiedpush-admin-client';
 import {VariantHandler} from './VariantHandler';
 import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
@@ -23,12 +23,11 @@ export class AndroidVariantHandler implements VariantHandler {
 
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
-
-    return await UPSAdminClientFactory.getUpsAdminInstance(
-      argv
-    ).variants.create(
-      argv.appId as string,
-      {...answers, ...def} as AndroidVariant
-    );
+    return await UPSAdminClientFactory.getUpsAdminInstance(argv)
+      .variants.android.create(argv.appId as string)
+      .withName(argv.name as string)
+      .withGoogleKey(answers['googleKey'])
+      .withProjectNumber(answers['projectNumber'])
+      .execute();
   }
 }

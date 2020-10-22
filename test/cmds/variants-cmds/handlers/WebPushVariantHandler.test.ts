@@ -1,4 +1,4 @@
-import {WebPushVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {WebPushVariant} from '@aerogear/unifiedpush-admin-client';
 import {UnifiedPushAdminClientMock} from '../../../mocks';
 import {WebPushVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/WebPushVariantHandler';
 

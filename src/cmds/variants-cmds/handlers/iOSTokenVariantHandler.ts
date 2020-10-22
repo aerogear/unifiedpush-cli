@@ -1,6 +1,6 @@
 import {VariantHandler} from './VariantHandler';
 import {Arguments} from 'yargs';
-import {IOSTokenVariant, Variant} from '@aerogear/unifiedpush-admin-client';
+import {Variant} from '@aerogear/unifiedpush-admin-client';
 import {fileToString} from './utils';
 import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
@@ -48,9 +48,14 @@ export class IOSTokenVariantHandler implements VariantHandler {
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
 
-    return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
-      argv.appId as string,
-      {...answers, ...def} as IOSTokenVariant
-    );
+    return UPSAdminClientFactory.getUpsAdminInstance(argv)
+      .variants.ios_token.create(argv.appId as string)
+      .withName(argv.name as string)
+      .withPrivateKey(answers['privateKey'])
+      .withKeyID(answers['keyId'])
+      .withTeamID(answers['teamUd'])
+      .withBundleID(answers['bundleId'])
+      .isProduction()
+      .execute();
   }
 }

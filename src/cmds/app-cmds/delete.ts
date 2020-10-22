@@ -1,5 +1,5 @@
 import {Arguments, Argv} from 'yargs';
-import {PushApplicationSearchOptions} from '@aerogear/unifiedpush-admin-client';
+import {PushApplicationFilter} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
 import {normalizeFilter} from '../../utils/FilterUtils';
 import * as inquirer from 'inquirer';
@@ -22,31 +22,31 @@ export const builder = (yargs: Argv) => {
 };
 
 export const handler = async (argv: Arguments) => {
-  const filter: PushApplicationSearchOptions = argv.filter
+  const filter: PushApplicationFilter = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter as string))
     : {};
 
-  const apps = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).applications.find({filter});
+  const apps = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .applications.search()
+    .withFilter(filter)
+    .execute();
 
-  if (apps.length !== 0) {
+  if (apps.list.length !== 0) {
     const questions: Array<{}> = [
       {
         name: 'confirm',
         type: 'confirm',
-        message: `${apps.length} application(s) will be deleted. Proceed?`,
+        message: `${apps.total} application(s) will be deleted. Proceed?`,
         default: false,
       },
     ];
-
     const answers: Record<string, string> = await inquirer.prompt(questions);
-
     if (answers.confirm) {
-      await UPSAdminClientFactory.getUpsAdminInstance(argv).applications.delete(
-        filter
-      );
-      console.log(`${apps.length} application(s) deleted`);
+      await UPSAdminClientFactory.getUpsAdminInstance(argv)
+        .applications.delete()
+        .withFilter(filter)
+        .execute();
+      console.log(`${apps.list.length} application(s) deleted`);
     }
   } else {
     console.log('0 applications deleted');

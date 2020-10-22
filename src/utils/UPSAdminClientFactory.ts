@@ -1,16 +1,16 @@
-import {UnifiedPushAdminClient} from '@aerogear/unifiedpush-admin-client';
+import {UpsAdminClient} from '@aerogear/unifiedpush-admin-client';
 import {Arguments} from 'yargs';
 import {
   BasicCredentials,
   KeycloakCredentials,
-} from '@aerogear/unifiedpush-admin-client/dist/src/UnifiedPushAdminClient';
+} from '@aerogear/unifiedpush-admin-client/dist/src/credentials';
 
 export class UPSAdminClientFactory {
   static getUpsAdminInstance(argv: Arguments) {
     const type = argv['auth-type'] as string;
 
     return type === 'basic'
-      ? new UnifiedPushAdminClient(
+      ? new UpsAdminClient(
           argv.url as string,
           {
             username: argv.username as string,
@@ -18,7 +18,7 @@ export class UPSAdminClientFactory {
             type: 'basic',
           } as BasicCredentials
         )
-      : new UnifiedPushAdminClient(
+      : new UpsAdminClient(
           argv.url as string,
           {
             username: argv.username as string,

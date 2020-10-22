@@ -1,6 +1,7 @@
 import {Arguments, Argv} from 'yargs';
-import {Variant, VariantFilter} from '@aerogear/unifiedpush-admin-client';
+import {Variant} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
 import {table} from 'table';
 import {normalizeFilter} from '../../utils/FilterUtils';
 
@@ -28,12 +29,13 @@ export const builder = (yargs: Argv) => {
 };
 
 export const handler = async (argv: Arguments<Record<string, string>>) => {
-  const filter: VariantFilter | undefined = argv.filter
+  const filter: VariantFilter = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter))
-    : undefined;
-  const variants = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).variants.find(argv.appId, filter);
+    : {};
+  const variants = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .variants.search(argv.appId)
+    .withFilter(filter)
+    .execute();
   if (variants.length !== 0) {
     const tableData = variants.reduce(
       (previousValue: string[][], currentValue: Variant): string[][] => {

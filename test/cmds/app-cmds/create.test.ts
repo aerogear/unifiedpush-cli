@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
+import {ConsoleMock, UnifiedPushAdminClientMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/create';
 
 beforeEach(() => {
@@ -14,8 +13,12 @@ afterEach(() => {
 
 describe('applications', () => {
   it('Should create an application', async () => {
-    // @ts-ignore
-    await handler({url: 'http://localhost:9999', name: 'TEST-APP'});
+    await handler({
+      url: 'http://localhost:9999',
+      name: 'TEST-APP',
+      _: [],
+      $0: '',
+    });
     expect(ConsoleMock.log).toHaveBeenCalledTimes(2);
     expect(ConsoleMock.log).toHaveBeenCalledWith(
       'Application created successfully'

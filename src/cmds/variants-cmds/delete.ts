@@ -1,8 +1,8 @@
 import {Arguments, Argv} from 'yargs';
-import {VariantFilter} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
 import * as inquirer from 'inquirer';
 import {normalizeFilter} from '../../utils/FilterUtils';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
 
 export const command = 'delete';
 
@@ -28,12 +28,13 @@ export const builder = (yargs: Argv) => {
 };
 
 export const handler = async (argv: Arguments<Record<string, string>>) => {
-  const filter: VariantFilter | undefined = argv.filter
+  const filter: VariantFilter = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter))
-    : undefined;
-  const variants = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).variants.find(argv.appId, filter);
+    : {};
+  const variants = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .variants.search(argv.appId)
+    .withFilter(filter)
+    .execute();
   const questions: Array<{}> = [
     {
       name: 'confirm',
@@ -47,7 +48,10 @@ export const handler = async (argv: Arguments<Record<string, string>>) => {
   if (answers.confirm) {
     const deletedVariants = await UPSAdminClientFactory.getUpsAdminInstance(
       argv
-    ).variants.delete(argv.appId, filter);
+    )
+      .variants.delete(argv.appId)
+      .withFilter(filter)
+      .execute();
     console.log(
       `${deletedVariants.filter(variant => variant).length} variant(s) deleted`
     );

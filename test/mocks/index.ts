@@ -1,8 +1,5 @@
 export {ConsoleMock} from './ConsoleMock';
-export {
-  UnifiedPushAdminClientMock,
-  AdminClientMock,
-} from './MockUnifiedPushAdminClient';
+export {UnifiedPushAdminClientMock} from './UpsAdminClient/MockUnifiedPushAdminClient';
 export {
   MockedVariantHandlerFactory,
   MockedVariantHandler,

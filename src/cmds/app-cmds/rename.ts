@@ -23,10 +23,10 @@ export const builder = (yargs: Argv) => {
     .help();
 };
 
-export const handler = async (argv: Arguments<Record<string, string>>) => {
-  await UPSAdminClientFactory.getUpsAdminInstance(argv).applications.rename(
-    argv.appId,
-    argv.name
-  );
+export const handler = async (argv: Arguments) => {
+  await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .applications.update(argv.appId as string)
+    .withName(argv.name as string)
+    .execute();
   console.log('Application renamed successfully');
 };

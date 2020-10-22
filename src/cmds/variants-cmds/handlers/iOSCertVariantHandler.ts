@@ -1,6 +1,6 @@
 import {VariantHandler} from './VariantHandler';
 import {Arguments} from 'yargs';
-import {IOSVariant, Variant} from '@aerogear/unifiedpush-admin-client';
+import {Variant} from '@aerogear/unifiedpush-admin-client';
 import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
 import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
@@ -34,9 +34,12 @@ export class IOSCertVariantHandler implements VariantHandler {
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
 
-    return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
-      argv.appId as string,
-      {...answers, ...def} as IOSVariant
-    );
+    return UPSAdminClientFactory.getUpsAdminInstance(argv)
+      .variants.ios.create(argv.appId as string)
+      .withName(argv.name as string)
+      .withCertificate(answers['certificate'])
+      .withPassphrase(answers['password'])
+      .isProduction()
+      .execute();
   }
 }
