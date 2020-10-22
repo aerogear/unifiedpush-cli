@@ -19,9 +19,9 @@ export const builder = (yargs: Argv) => {
 };
 
 export const handler = async (argv: Arguments) => {
-  const app = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).applications.create(argv.name as string);
+  const app = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .applications.create(argv.name as string)
+    .execute();
 
   console.log('Application created successfully');
   console.log(

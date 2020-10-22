@@ -1,4 +1,4 @@
-import {AndroidVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {AndroidVariant} from '@aerogear/unifiedpush-admin-client';
 import {UnifiedPushAdminClientMock} from '../../../mocks';
 import {AndroidVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/AndroidVariantHandler';
 
@@ -24,7 +24,7 @@ describe('AndroidVariantHandler', () => {
     expect(variant.type).toEqual('android');
     expect(variant.variantID).toEqual('TEST-ID');
     expect(variant.developer).toEqual('TEST-DEVELOPER');
-    expect(variant.googleKey).toEqual('TEST-GOOGLE-KEY');
+    expect(variant).toEqual('TEST-GOOGLE-KEY');
     expect(variant.projectNumber).toEqual('TEST-PRJ-NUMBER');
   });
 });

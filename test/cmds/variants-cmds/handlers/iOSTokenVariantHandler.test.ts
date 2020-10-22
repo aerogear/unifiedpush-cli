@@ -1,5 +1,5 @@
-import {IOSTokenVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
-import {UnifiedPushAdminClientMock} from '../../../mocks/MockUnifiedPushAdminClient';
+import {IOSTokenVariant} from '@aerogear/unifiedpush-admin-client';
+import {UnifiedPushAdminClientMock} from '../../../mocks';
 import {IOSTokenVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/iOSTokenVariantHandler';
 
 beforeEach(() => {

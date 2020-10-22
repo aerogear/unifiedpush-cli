@@ -2,7 +2,7 @@ import {table} from 'table';
 import {Arguments, Argv} from 'yargs';
 import {
   PushApplication,
-  PushApplicationSearchOptions,
+  PushApplicationFilter,
 } from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
 import {normalizeFilter} from '../../utils/FilterUtils';
@@ -30,19 +30,20 @@ export const builder = (yargs: Argv) => {
 };
 
 export const handler = async (argv: Arguments) => {
-  const filter: PushApplicationSearchOptions = argv.filter
+  const filter: PushApplicationFilter = argv.filter
     ? normalizeFilter(JSON.parse(argv.filter as string))
     : {};
 
-  filter.includeActivity = true;
-  filter.includeDeviceCount = true;
+  // filter.includeActivity = true;
+  // filter.includeDeviceCount = true;
 
   const page: number = (argv.page as number) || 0;
-  const apps = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).applications.find({filter, page});
-  if (apps.length !== 0) {
-    const tableData = apps.reduce(
+  const apps = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .applications.search()
+    .execute();
+
+  if (apps.list.length !== 0) {
+    const tableData = apps.list.reduce(
       (
         previousValue: string[][],
         currentValue: PushApplication
@@ -51,8 +52,8 @@ export const handler = async (argv: Arguments) => {
           currentValue.name,
           currentValue.pushApplicationID!,
           `${currentValue.variants?.length || 0}`,
-          `${currentValue.deviceCount}`,
-          `${currentValue.activity}`,
+          `${currentValue.metadata?.deviceCount}`,
+          `${currentValue.metadata?.activity}`,
         ]);
         return previousValue;
       },

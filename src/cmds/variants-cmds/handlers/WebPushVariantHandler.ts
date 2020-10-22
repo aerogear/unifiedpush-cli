@@ -6,7 +6,7 @@ import {VariantHandler} from './VariantHandler';
 import {Variant} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
 import {VariantDef} from './VariantDef';
-import {WebPushVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+import {WebPushVariant} from '@aerogear/unifiedpush-admin-client';
 
 export class WebPushVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [
@@ -25,7 +25,7 @@ export class WebPushVariantHandler implements VariantHandler {
     let publicKeyBuffer = curve.getPublicKey();
     let privateKeyBuffer = curve.getPrivateKey();
 
-    // Occasionally the keys will not be padded to the correct lengh resulting
+    // Occasionally the keys will not be padded to the correct length resulting
     // in errors, hence this padding.
     // See https://github.com/web-push-libs/web-push/issues/295 for history.
     if (privateKeyBuffer.length < 32) {
@@ -46,16 +46,34 @@ export class WebPushVariantHandler implements VariantHandler {
     };
   }
 
+  // async handle(argv: Arguments, def: {}): Promise<Variant> {
+  //   const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
+  //
+  //   return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
+  //     argv.appId as string,
+  //     {
+  //       ...answers,
+  //       ...def,
+  //       ...WebPushVariantHandler.generateVAPIDKeys(),
+  //     } as WebPushVariant
+  //   );
+  // }
+
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
 
-    return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
-      argv.appId as string,
-      {
-        ...answers,
-        ...def,
-        ...WebPushVariantHandler.generateVAPIDKeys(),
-      } as WebPushVariant
-    );
+    return UPSAdminClientFactory.getUpsAdminInstance(argv)
+      .variants.web_push.create(argv.appId as string)
+      .withAlias(answers['alias'])
+      .execute();
   }
 }
+
+// async handle(argv: Arguments, def: {}): Promise<Variant> {
+//   const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
+//
+// return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.web_push
+//     .create(argv.appId as string)
+//     .withAlias(answers['alias'])
+//     .execute()
+// }

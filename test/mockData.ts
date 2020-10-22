@@ -3,12 +3,13 @@ import {
   IOSTokenVariant,
   IOSVariant,
   PushApplication,
+  WebPushVariant,
 } from '@aerogear/unifiedpush-admin-client';
-import {WebPushVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
+// import {WebPushVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
 
 export const mockData: PushApplication[] = [
   {
-    id: '1',
+    // id: '1',
     pushApplicationID: '1:1',
     name: 'Application 1',
     description: 'Application 1',
@@ -48,7 +49,7 @@ export const mockData: PushApplication[] = [
     ],
   },
   {
-    id: '2',
+    // id: '2',
     pushApplicationID: '2:2',
     name: 'Application 2',
     description: 'Application 2',
@@ -76,7 +77,7 @@ export const mockData: PushApplication[] = [
     ],
   },
   {
-    id: '3',
+    // id: '3',
     pushApplicationID: '3:3',
     name: 'Application 3',
     description: 'Application 3',
@@ -96,7 +97,7 @@ export const mockData: PushApplication[] = [
     ],
   },
   {
-    id: '4',
+    // id: '4',
     pushApplicationID: '4:4',
     name: 'Application 4',
     description: 'Application 4',

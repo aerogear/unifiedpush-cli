@@ -1,5 +1,5 @@
-import {IOSVariant} from '@aerogear/unifiedpush-admin-client/dist/src/variants';
-import {UnifiedPushAdminClientMock} from '../../../mocks/MockUnifiedPushAdminClient';
+import {IOSVariant} from '@aerogear/unifiedpush-admin-client';
+import {UnifiedPushAdminClientMock} from '../../../mocks';
 import {IOSCertVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/iOSCertVariantHandler';
 
 beforeEach(() => {
@@ -18,7 +18,7 @@ describe('IOSCertVaraintHandler', () => {
         password: 'password',
         production: false,
         type: 'ios',
-      } as IOSVariant
+      }
     )) as IOSVariant;
     expect(variant).toBeDefined();
     expect(variant.name).toEqual('test-ios');

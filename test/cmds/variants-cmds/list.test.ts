@@ -2,7 +2,8 @@
 import {Arguments} from 'yargs';
 import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/variants-cmds/list';
-import {VariantFilter} from '@aerogear/unifiedpush-admin-client';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
+import {UPSAdminClientFactory} from '../../../src/utils/UPSAdminClientFactory';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -16,6 +17,12 @@ afterEach(() => {
 
 describe('variants list', () => {
   it('Should list all variants', async () => {
+    const app = await UPSAdminClientFactory.getUpsAdminInstance({_: [], $0: ''})
+      .applications.create('application 1')
+      .execute();
+
+    // await UPSAdminClientFactory.getUpsAdminInstance({_: [], $0: ''})
+    //     .variants.android.create()
     const expectedResult = `╔═══════════╤════════════╤══════════╗
 ║ NAME      │ VARIANT-ID │ TYPE     ║
 ╟───────────┼────────────┼──────────╢
@@ -27,7 +34,7 @@ describe('variants list', () => {
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
-      appId: '2:2',
+      appId: app.pushApplicationID,
       _: [''],
       $0: '',
     } as Arguments);
