@@ -40,6 +40,7 @@ export class IOSCertVariantHandler implements VariantHandler {
       .withCertificate(answers['certificate'])
       .withPassphrase(answers['password'])
       .isProduction()
+      .withDefinition(def)
       .execute();
   }
 }

@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {Arguments} from 'yargs';
-import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
+import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/variants-cmds/list';
 import {VariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
-import {UPSAdminClientFactory} from '../../../src/utils/UPSAdminClientFactory';
+import {
+  createApplications,
+  deleteApplication,
+  getAllApplications,
+  initMockEngine,
+} from '../../mocks/UPSMock';
 
 beforeEach(() => {
+  initMockEngine();
   // Clear all instances and calls to constructor and all methods:
-  UnifiedPushAdminClientMock.mockClear();
   ConsoleMock.init();
 });
 
@@ -17,24 +22,21 @@ afterEach(() => {
 
 describe('variants list', () => {
   it('Should list all variants', async () => {
-    const app = await UPSAdminClientFactory.getUpsAdminInstance({_: [], $0: ''})
-      .applications.create('application 1')
-      .execute();
+    createApplications({variantCount: 2, variantType: 'android'});
+    const testApp = getAllApplications()[2];
 
-    // await UPSAdminClientFactory.getUpsAdminInstance({_: [], $0: ''})
-    //     .variants.android.create()
-    const expectedResult = `╔═══════════╤════════════╤══════════╗
-║ NAME      │ VARIANT-ID │ TYPE     ║
-╟───────────┼────────────┼──────────╢
-║ Variant 1 │ v-2:1      │ android  ║
-╟───────────┼────────────┼──────────╢
-║ Variant 2 │ v-2:2      │ web_push ║
-╚═══════════╧════════════╧══════════╝
+    const expectedResult = `╔═══════╤══════════════════════════════════════╤═════════╗
+║ NAME  │ VARIANT-ID                           │ TYPE    ║
+╟───────┼──────────────────────────────────────┼─────────╢
+║ ${testApp.variants![0].name} │ ${testApp.variants![0].variantID} │ android ║
+╟───────┼──────────────────────────────────────┼─────────╢
+║ ${testApp.variants![1].name} │ ${testApp.variants![1].variantID} │ android ║
+╚═══════╧══════════════════════════════════════╧═════════╝
 `;
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
-      appId: app.pushApplicationID,
+      appId: testApp.pushApplicationID,
       _: [''],
       $0: '',
     } as Arguments);
@@ -42,11 +44,15 @@ describe('variants list', () => {
     expect(ConsoleMock.log).toHaveBeenCalledWith(expectedResult);
   });
   it('Should return "no variants found"', async () => {
+    createApplications({});
+    const testApp = getAllApplications()[3];
+    deleteApplication(testApp.pushApplicationID);
+
     const filter: VariantFilter = {name: 'wrongname'};
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
-      appId: '2:2',
+      appId: testApp.pushApplicationID,
       filter: JSON.stringify(filter),
       _: [''],
       $0: '',

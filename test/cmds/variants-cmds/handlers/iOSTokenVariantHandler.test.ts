@@ -1,17 +1,28 @@
 import {IOSTokenVariant} from '@aerogear/unifiedpush-admin-client';
-import {UnifiedPushAdminClientMock} from '../../../mocks';
 import {IOSTokenVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/iOSTokenVariantHandler';
+import {
+  createApplications,
+  getAllApplications,
+  initMockEngine,
+} from '../../../mocks/UPSMock';
 
 beforeEach(() => {
-  // Clear all instances and calls to constructor and all methods:
-  UnifiedPushAdminClientMock.mockClear();
+  initMockEngine();
 });
 
-describe('IOSTokenVaraintHandler', () => {
+describe('IOSTokenVariantHandler', () => {
   it('Should have everything to create a iOSTokenVariant', async () => {
+    createApplications({});
+    const testApp = getAllApplications()[3];
     const handler = new IOSTokenVariantHandler();
     const variant = (await handler.handle(
-      {'auth-type': 'basic', url: 'http://localhost:9999', _: [''], $0: ''},
+      {
+        'auth-type': 'basic',
+        url: 'http://localhost:9999',
+        appId: testApp.pushApplicationID,
+        _: [''],
+        $0: '',
+      },
       {
         name: 'test-ios-token',
         teamId: 'MyTeamID',
@@ -19,6 +30,7 @@ describe('IOSTokenVaraintHandler', () => {
         bundleId: 'org.aerogear',
         type: 'ios_token',
         privateKey: '/path/to/key',
+        developer: 'TEST-DEVELOPER',
         production: false,
       }
     )) as IOSTokenVariant;

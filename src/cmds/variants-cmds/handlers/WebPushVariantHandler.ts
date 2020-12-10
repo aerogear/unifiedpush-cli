@@ -6,7 +6,6 @@ import {VariantHandler} from './VariantHandler';
 import {Variant} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../../utils/UPSAdminClientFactory';
 import {VariantDef} from './VariantDef';
-import {WebPushVariant} from '@aerogear/unifiedpush-admin-client';
 
 export class WebPushVariantHandler implements VariantHandler {
   private readonly questions = (def: VariantDef): Array<{}> => [
@@ -45,35 +44,13 @@ export class WebPushVariantHandler implements VariantHandler {
       privateKey: urlBase64.encode(privateKeyBuffer),
     };
   }
-
-  // async handle(argv: Arguments, def: {}): Promise<Variant> {
-  //   const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
-  //
-  //   return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.create(
-  //     argv.appId as string,
-  //     {
-  //       ...answers,
-  //       ...def,
-  //       ...WebPushVariantHandler.generateVAPIDKeys(),
-  //     } as WebPushVariant
-  //   );
-  // }
-
   async handle(argv: Arguments, def: {}): Promise<Variant> {
     const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
 
     return UPSAdminClientFactory.getUpsAdminInstance(argv)
       .variants.web_push.create(argv.appId as string)
       .withAlias(answers['alias'])
+      .withDefinition(def || {})
       .execute();
   }
 }
-
-// async handle(argv: Arguments, def: {}): Promise<Variant> {
-//   const answers = (await inquirer.prompt(this.questions(def))) as VariantDef;
-//
-// return UPSAdminClientFactory.getUpsAdminInstance(argv).variants.web_push
-//     .create(argv.appId as string)
-//     .withAlias(answers['alias'])
-//     .execute()
-// }

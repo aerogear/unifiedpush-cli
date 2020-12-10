@@ -40,6 +40,8 @@ export const handler = async (argv: Arguments) => {
   const page: number = (argv.page as number) || 0;
   const apps = await UPSAdminClientFactory.getUpsAdminInstance(argv)
     .applications.search()
+    .withFilter(filter)
+    .page(page)
     .execute();
 
   if (apps.list.length !== 0) {

@@ -1,20 +1,34 @@
 import {WebPushVariant} from '@aerogear/unifiedpush-admin-client';
-import {UnifiedPushAdminClientMock} from '../../../mocks';
 import {WebPushVariantHandler} from '../../../../src/cmds/variants-cmds/handlers/WebPushVariantHandler';
+import {
+  createApplications,
+  getAllApplications,
+  initMockEngine,
+} from '../../../mocks/UPSMock';
 
 beforeEach(() => {
-  // Clear all instances and calls to constructor and all methods:
-  UnifiedPushAdminClientMock.mockClear();
+  initMockEngine();
 });
 
 describe('WebPushVariantHandler', () => {
   it('Should have everything to create a WebPushVariant', async () => {
+    createApplications({});
+    const testApp = getAllApplications()[8];
     const handler = new WebPushVariantHandler();
     const variant = (await handler.handle(
-      {'auth-type': 'basic', url: 'http://localhost:9999', _: [''], $0: ''},
+      {
+        'auth-type': 'basic',
+        url: 'http://localhost:9999',
+        appId: testApp.pushApplicationID,
+        _: [''],
+        $0: '',
+      },
       {
         name: 'test',
         alias: 'mailto:test@redhat.com',
+        developer: 'TEST-DEVELOPER',
+        privateKey: 'ABSBSHDBDSBDS',
+        publicKey: 'SJGSJFGKDSJGFKS',
         type: 'web_push',
       } as WebPushVariant
     )) as WebPushVariant;
@@ -22,7 +36,6 @@ describe('WebPushVariantHandler', () => {
     expect(variant.name).toEqual('test');
     expect(variant.alias).toEqual('mailto:test@redhat.com');
     expect(variant.type).toEqual('web_push');
-    expect(variant.variantID).toEqual('TEST-ID');
     expect(variant.developer).toEqual('TEST-DEVELOPER');
     expect(variant.privateKey).toBeDefined();
     expect(variant.privateKey.length).toBeGreaterThan(1);
