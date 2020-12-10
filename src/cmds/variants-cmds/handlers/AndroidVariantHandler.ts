@@ -1,5 +1,8 @@
 import {Arguments} from 'yargs';
-import {Variant} from '@aerogear/unifiedpush-admin-client';
+import {
+  AndroidVariantDefinition,
+  Variant,
+} from '@aerogear/unifiedpush-admin-client';
 import {VariantHandler} from './VariantHandler';
 import {VariantDef} from './VariantDef';
 import * as inquirer from 'inquirer';
@@ -28,6 +31,7 @@ export class AndroidVariantHandler implements VariantHandler {
       .withName(argv.name as string)
       .withGoogleKey(answers['googleKey'])
       .withProjectNumber(answers['projectNumber'])
+      .withDefinition(def as AndroidVariantDefinition)
       .execute();
   }
 }

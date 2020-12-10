@@ -56,6 +56,7 @@ export class IOSTokenVariantHandler implements VariantHandler {
       .withTeamID(answers['teamUd'])
       .withBundleID(answers['bundleId'])
       .isProduction()
+      .withDefinition(def || {})
       .execute();
   }
 }
