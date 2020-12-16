@@ -1,3 +1,12 @@
+## [0.2.11](https://github.com/aerogear/unifiedpush-cli/compare/1.0.0...0.2.11) (2020-12-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency eslint-plugin-jest to v24 ([071b9f6](https://github.com/aerogear/unifiedpush-cli/commit/071b9f6966f8c888d89f435794ec4a819dc1efa9))
+
+
+
 # [1.0.0](https://github.com/aerogear/unifiedpush-cli/compare/0.2.10...1.0.0) (2020-12-16)
 
 
@@ -27,10 +36,6 @@
 
 
 ## [0.2.8](https://github.com/aerogear/unifiedpush-cli/compare/0.2.7...0.2.8) (2020-06-24)
-
-
-
-## [0.2.7](https://github.com/aerogear/unifiedpush-cli/compare/0.2.6...0.2.7) (2020-06-24)
 
 
 
