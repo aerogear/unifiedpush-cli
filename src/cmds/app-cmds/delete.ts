@@ -1,8 +1,6 @@
 import {Arguments, Argv} from 'yargs';
-import {PushApplicationSearchOptions} from '@aerogear/unifiedpush-admin-client';
+import {PushApplicationFilter} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
-import {normalizeFilter} from '../../utils/FilterUtils';
-import * as inquirer from 'inquirer';
 
 export const command = 'delete';
 
@@ -10,45 +8,44 @@ export const describe = 'delete applications';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group('filter', 'Delete Applications:')
-    .option('filter', {
+    .group(
+      ['url', 'name', 'app-id', 'description', 'developer'],
+      'Delete Applications:'
+    )
+    .option('name', {
       required: false,
       type: 'string',
-      describe:
-        'A filter to select the application(s) to be deleted (JSon). If not specified, all applications will be deleted.',
+      describe: 'Deletes all the applications with a given name',
+      requiresArg: true,
+    })
+    .option('app-id', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes the application identified by the given id',
+      requiresArg: true,
+    })
+    .option('description', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes all the applications matching the given description',
+      requiresArg: true,
+    })
+    .option('developer', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes all the applications matching the given developer',
       requiresArg: true,
     })
     .help();
 };
 
-export const handler = async (argv: Arguments) => {
-  const filter: PushApplicationSearchOptions = argv.filter
-    ? normalizeFilter(JSON.parse(argv.filter as string))
-    : {};
-
-  const apps = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).applications.find({filter});
-
-  if (apps.length !== 0) {
-    const questions: Array<{}> = [
-      {
-        name: 'confirm',
-        type: 'confirm',
-        message: `${apps.length} application(s) will be deleted. Proceed?`,
-        default: false,
-      },
-    ];
-
-    const answers: Record<string, string> = await inquirer.prompt(questions);
-
-    if (answers.confirm) {
-      await UPSAdminClientFactory.getUpsAdminInstance(argv).applications.delete(
-        filter
-      );
-      console.log(`${apps.length} application(s) deleted`);
-    }
-  } else {
-    console.log('0 applications deleted');
-  }
+export const handler = async (argv: Arguments<PushApplicationFilter>) => {
+  const apps = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .applications.delete()
+    .withFilter({
+      pushApplicationID: argv.appId as string,
+      ...argv,
+    })
+    .execute();
+  console.log(`${apps.length} application(s) deleted`);
 };

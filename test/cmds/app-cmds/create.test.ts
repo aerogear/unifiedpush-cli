@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
+import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/create';
+import {getAllApplications, initMockEngine} from '../../mocks/UPSMock';
+import {IDGenerator} from '../../mocks/DataStore';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
-  UnifiedPushAdminClientMock.mockClear();
+  //UnifiedPushAdminClientMock.mockClear();
+  initMockEngine();
   ConsoleMock.init();
 });
 
@@ -14,19 +16,21 @@ afterEach(() => {
 
 describe('applications', () => {
   it('Should create an application', async () => {
-    // @ts-ignore
-    await handler({url: 'http://localhost:9999', name: 'TEST-APP'});
-    expect(ConsoleMock.log).toHaveBeenCalledTimes(2);
-    expect(ConsoleMock.log).toHaveBeenCalledWith(
-      'Application created successfully'
+    const appId = IDGenerator.peek();
+
+    await handler({
+      url: 'http://localhost:9999',
+      name: 'TEST-APP',
+      output: 'json',
+      _: [],
+      $0: '',
+    });
+
+    const testApp = getAllApplications().find(
+      app => app.pushApplicationID === appId
     );
-    expect(ConsoleMock.log).toHaveBeenCalledWith(
-      `╔══════════╤═════════════════════╗
-║ NAME     │ PUSH-APPLICATION-ID ║
-╟──────────┼─────────────────────╢
-║ TEST-APP │ new-app-push-id     ║
-╚══════════╧═════════════════════╝
-`
-    );
+
+    expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
+    expect(ConsoleMock.log).toHaveBeenCalledWith(JSON.stringify([testApp]));
   });
 });

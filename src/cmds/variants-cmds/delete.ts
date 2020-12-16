@@ -1,55 +1,58 @@
 import {Arguments, Argv} from 'yargs';
-import {VariantFilter} from '@aerogear/unifiedpush-admin-client';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
-import * as inquirer from 'inquirer';
-import {normalizeFilter} from '../../utils/FilterUtils';
-
 export const command = 'delete';
 
 export const describe = 'delete variant(s)';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['app-id'], 'Delete Variant:')
+    .group(
+      ['app-id', 'variant-id', 'name', 'developer', 'type'],
+      'Delete Variants:'
+    )
     .option('app-id', {
       required: true,
       type: 'string',
-      describe: 'Id of the application owning the variant(s)',
+      describe: 'The application id',
       requiresArg: true,
     })
-    .option('filter', {
+    .option('variant-id', {
       required: false,
       type: 'string',
-      describe:
-        'A filter to select the variant(s) to be deleted. If not specified, all variants will be deleted.',
+      describe: 'Deletes the variant identified by the specified id',
+      requiresArg: true,
+    })
+    .option('name', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes all the variants matching the specified name',
+      requiresArg: true,
+    })
+    .option('developer', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes all the variants matching the specified developer',
+      requiresArg: true,
+    })
+    .option('type', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes all the variants of the specified type',
       requiresArg: true,
     })
     .help();
 };
 
-export const handler = async (argv: Arguments<Record<string, string>>) => {
-  const filter: VariantFilter | undefined = argv.filter
-    ? normalizeFilter(JSON.parse(argv.filter))
-    : undefined;
-  const variants = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).variants.find(argv.appId, filter);
-  const questions: Array<{}> = [
-    {
-      name: 'confirm',
-      type: 'confirm',
-      message: `${variants.length} variant(s) will be deleted. Proceed?`,
-      default: false,
-    },
-  ];
-
-  const answers: Record<string, string> = await inquirer.prompt(questions);
-  if (answers.confirm) {
-    const deletedVariants = await UPSAdminClientFactory.getUpsAdminInstance(
-      argv
-    ).variants.delete(argv.appId, filter);
-    console.log(
-      `${deletedVariants.filter(variant => variant).length} variant(s) deleted`
-    );
-  }
+export const handler = async (argv: Arguments<VariantFilter>) => {
+  const filter = {
+    pushApplicationID: argv.appId as string,
+    variantID: argv.variantId as string,
+    ...argv,
+  };
+  const deletedVariants = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .variants.delete(argv.appId as string)
+    .withFilter(filter)
+    .execute();
+  console.log(`${deletedVariants.length} variant(s) deleted`);
 };

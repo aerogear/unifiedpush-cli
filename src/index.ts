@@ -85,7 +85,18 @@ authOptions(yargs)
   })
   .alias('h', 'help')
   .alias('v', 'version')
-  .commandDir('cmds')
+  .option('output', {
+    alias: 'o',
+    choices: ['table', 'json'],
+    default: 'table',
+    required: false,
+    type: 'string',
+    describe: 'The output to be generated',
+    requiresArg: true,
+  })
+  .commandDir('cmds', {
+    extensions: process.env.upscli_test ? ['js', 'ts'] : ['js'],
+  })
   .strict()
   .fail((msg, err) => {
     console.log('ERROR -', extractErrorDetails(msg, err));

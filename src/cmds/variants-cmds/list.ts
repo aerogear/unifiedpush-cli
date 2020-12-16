@@ -1,8 +1,7 @@
 import {Arguments, Argv} from 'yargs';
-import {Variant, VariantFilter} from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
-import {table} from 'table';
-import {normalizeFilter} from '../../utils/FilterUtils';
+import {VariantFilter} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
+import {generateOutput} from '../../utils/output';
 
 exports.command = 'list';
 
@@ -11,43 +10,69 @@ exports.describe =
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['filter', 'app-id'], 'Variants list:')
+    .group(
+      ['url', 'app-id', 'variant-id', 'type', 'name', 'developer', 'output'],
+      'List variants:'
+    )
     .option('app-id', {
       required: true,
       type: 'string',
       describe: 'The application id',
       requiresArg: true,
     })
-    .option('filter', {
+    .option('variant-id', {
       required: false,
       type: 'string',
-      describe: 'Filter to be used to refine the list',
+      describe: 'The variant id',
+      requiresArg: true,
+    })
+    .option('name', {
+      required: false,
+      type: 'string',
+      describe: 'Returns all the variants matching the specified name',
+      requiresArg: true,
+    })
+    .option('developer', {
+      required: false,
+      type: 'string',
+      describe: 'Returns all the variants matching the specified developer',
+      requiresArg: true,
+    })
+    .option('type', {
+      required: false,
+      type: 'string',
+      describe: 'Returns all the variants of the specified type',
+      requiresArg: true,
+    })
+    .option('output', {
+      alias: 'o',
+      choices: ['table', 'json'],
+      default: 'table',
+      required: false,
+      type: 'string',
+      describe: 'The output to be generated',
       requiresArg: true,
     })
     .help();
 };
 
-export const handler = async (argv: Arguments<Record<string, string>>) => {
-  const filter: VariantFilter | undefined = argv.filter
-    ? normalizeFilter(JSON.parse(argv.filter))
-    : undefined;
-  const variants = await UPSAdminClientFactory.getUpsAdminInstance(
-    argv
-  ).variants.find(argv.appId, filter);
-  if (variants.length !== 0) {
-    const tableData = variants.reduce(
-      (previousValue: string[][], currentValue: Variant): string[][] => {
-        previousValue.push([
-          currentValue.name,
-          currentValue.variantID!,
-          currentValue.type,
-        ]);
-        return previousValue;
-      },
-      [['NAME', 'VARIANT-ID', 'TYPE']]
-    );
-    console.log(table(tableData));
-  } else {
-    console.log('No variants found');
-  }
+export const handler = async (argv: Arguments<VariantFilter>) => {
+  const filter: VariantFilter = {
+    variantID: argv.variantId as string,
+    ...argv,
+  };
+
+  const variants = await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .variants.search(argv.appId as string)
+    .withFilter(filter)
+    .execute();
+
+  console.log(
+    generateOutput({
+      headers: ['NAME', 'VARIANT-ID', 'TYPE'],
+      properties: ['name', 'variantID', 'type'],
+      value: variants,
+      format: argv.output as string,
+    })
+  );
 };

@@ -1,5 +1,6 @@
 import {Arguments, Argv} from 'yargs';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
+import {generateOutput} from '../../utils/output';
 
 export const command = 'rename';
 
@@ -7,7 +8,7 @@ export const describe = 'rename one application';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group('app-id', 'Rename Application:')
+    .group(['url', 'app-id', 'name', 'output'], 'Rename Application:')
     .option('app-id', {
       required: true,
       type: 'string',
@@ -23,10 +24,10 @@ export const builder = (yargs: Argv) => {
     .help();
 };
 
-export const handler = async (argv: Arguments<Record<string, string>>) => {
-  await UPSAdminClientFactory.getUpsAdminInstance(argv).applications.rename(
-    argv.appId,
-    argv.name
-  );
-  console.log('Application renamed successfully');
+export const handler = async (argv: Arguments) => {
+  await UPSAdminClientFactory.getUpsAdminInstance(argv)
+    .applications.update(argv.appId as string)
+    .withName(argv.name as string)
+    .execute();
+  console.log(generateOutput({trailer: 'Application renamed successfully'}));
 };

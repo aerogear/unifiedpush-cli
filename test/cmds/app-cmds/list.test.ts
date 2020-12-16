@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-import {UnifiedPushAdminClientMock, ConsoleMock} from '../../mocks';
+import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/list';
+import {
+  createApplications,
+  getAllApplications,
+  initMockEngine,
+} from '../../mocks/UPSMock';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
-  UnifiedPushAdminClientMock.mockClear();
+  // UnifiedPushAdminClientMock.mockClear();
+  initMockEngine();
   ConsoleMock.init();
 });
 
@@ -14,23 +20,18 @@ afterEach(() => {
 
 describe('applications', () => {
   it('Should list all applications', async () => {
+    // create 5 applications
+    createApplications({appCount: 5, variantCount: 3});
+
+    const apps = getAllApplications();
+
     // @ts-ignore
-    await handler({url: 'http://localhost:9999'});
+    await handler({url: 'http://localhost:9999', output: 'json'});
+
+    const res = JSON.parse(ConsoleMock.log.mock.calls[0][0]);
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
-    expect(ConsoleMock.log).toHaveBeenCalledWith(
-      `╔═══════════════╤═════════════════════╤══════════╤═══════════════╤═══════════════╗
-║ NAME          │ PUSH-APPLICATION-ID │ VARIANTS │ INSTALLATIONS │ SENT-MESSAGES ║
-╟───────────────┼─────────────────────┼──────────┼───────────────┼───────────────╢
-║ Application 1 │ 1:1                 │ 3        │ undefined     │ undefined     ║
-╟───────────────┼─────────────────────┼──────────┼───────────────┼───────────────╢
-║ Application 2 │ 2:2                 │ 2        │ undefined     │ undefined     ║
-╟───────────────┼─────────────────────┼──────────┼───────────────┼───────────────╢
-║ Application 3 │ 3:3                 │ 1        │ undefined     │ undefined     ║
-╟───────────────┼─────────────────────┼──────────┼───────────────┼───────────────╢
-║ Application 4 │ 4:4                 │ 0        │ undefined     │ undefined     ║
-╚═══════════════╧═════════════════════╧══════════╧═══════════════╧═══════════════╝
-`
-    );
+    expect(res).toMatchObject(apps);
+    expect(res.length).toEqual(apps.length);
   });
 
   it('Should return "no applications found"', async () => {
@@ -38,9 +39,10 @@ describe('applications', () => {
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
+      output: 'json',
       filter: JSON.stringify(filter),
     });
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
-    expect(ConsoleMock.log).toHaveBeenCalledWith('No applications found');
+    expect(ConsoleMock.log).toHaveBeenCalledWith(JSON.stringify([]));
   });
 });
