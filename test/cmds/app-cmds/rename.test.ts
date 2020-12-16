@@ -1,28 +1,15 @@
 import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/rename';
-import {UPSAdminClientFactory} from '../../../src/utils/UPSAdminClientFactory';
-import * as inquirer from 'inquirer';
 import {
   createApplications,
   getAllApplications,
   initMockEngine,
 } from '../../mocks/UPSMock';
 
-jest.mock('inquirer', () => ({
-  prompt: jest
-    .fn()
-    .mockReturnValueOnce({confirm: true})
-    .mockReturnValue({confirm: false}),
-}));
-
 beforeEach(() => {
   ConsoleMock.init();
   initMockEngine();
   ConsoleMock.mockClear();
-  const promptMock = (inquirer.prompt as unknown) as jest.Mock<
-    typeof inquirer.prompt
-  >;
-  promptMock.mockClear();
 });
 
 afterEach(() => {

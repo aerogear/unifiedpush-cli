@@ -25,25 +25,20 @@ describe('variants list', () => {
     createApplications({variantCount: 2, variantType: 'android'});
     const testApp = getAllApplications()[2];
 
-    const expectedResult = `╔═══════╤══════════════════════════════════════╤═════════╗
-║ NAME  │ VARIANT-ID                           │ TYPE    ║
-╟───────┼──────────────────────────────────────┼─────────╢
-║ ${testApp.variants![0].name} │ ${testApp.variants![0].variantID} │ android ║
-╟───────┼──────────────────────────────────────┼─────────╢
-║ ${testApp.variants![1].name} │ ${testApp.variants![1].variantID} │ android ║
-╚═══════╧══════════════════════════════════════╧═════════╝
-`;
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
       appId: testApp.pushApplicationID,
+      output: 'json',
       _: [''],
       $0: '',
     } as Arguments);
     expect(ConsoleMock.log).toHaveBeenCalled();
-    expect(ConsoleMock.log).toHaveBeenCalledWith(expectedResult);
+    expect(ConsoleMock.log).toHaveBeenCalledWith(
+      JSON.stringify(testApp.variants)
+    );
   });
-  it('Should return "no variants found"', async () => {
+  it('Should return empty result', async () => {
     createApplications({});
     const testApp = getAllApplications()[3];
     deleteApplication(testApp.pushApplicationID);
@@ -54,10 +49,11 @@ describe('variants list', () => {
       url: 'http://localhost:9999',
       appId: testApp.pushApplicationID,
       filter: JSON.stringify(filter),
+      output: 'json',
       _: [''],
       $0: '',
     } as Arguments);
     expect(ConsoleMock.log).toHaveBeenCalled();
-    expect(ConsoleMock.log).toHaveBeenCalledWith('No variants found');
+    expect(ConsoleMock.log).toHaveBeenCalledWith(JSON.stringify([]));
   });
 });

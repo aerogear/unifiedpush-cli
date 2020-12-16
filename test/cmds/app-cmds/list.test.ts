@@ -26,24 +26,12 @@ describe('applications', () => {
     const apps = getAllApplications();
 
     // @ts-ignore
-    await handler({url: 'http://localhost:9999'});
+    await handler({url: 'http://localhost:9999', output: 'json'});
+
+    const res = JSON.parse(ConsoleMock.log.mock.calls[0][0]);
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
-    expect(ConsoleMock.log).toHaveBeenCalledWith(
-      `╔═══════╤══════════════════════════════════════╤══════════╤═══════════════╤═══════════════╗
-║ NAME  │ PUSH-APPLICATION-ID                  │ VARIANTS │ INSTALLATIONS │ SENT-MESSAGES ║
-╟───────┼──────────────────────────────────────┼──────────┼───────────────┼───────────────╢
-║ ${apps[0].name} │ ${apps[0].pushApplicationID} │ 3        │ NaN           │ NaN           ║
-╟───────┼──────────────────────────────────────┼──────────┼───────────────┼───────────────╢
-║ ${apps[1].name} │ ${apps[1].pushApplicationID} │ 3        │ NaN           │ NaN           ║
-╟───────┼──────────────────────────────────────┼──────────┼───────────────┼───────────────╢
-║ ${apps[2].name} │ ${apps[2].pushApplicationID} │ 3        │ NaN           │ NaN           ║
-╟───────┼──────────────────────────────────────┼──────────┼───────────────┼───────────────╢
-║ ${apps[3].name} │ ${apps[3].pushApplicationID} │ 3        │ NaN           │ NaN           ║
-╟───────┼──────────────────────────────────────┼──────────┼───────────────┼───────────────╢
-║ ${apps[4].name} │ ${apps[4].pushApplicationID} │ 3        │ NaN           │ NaN           ║
-╚═══════╧══════════════════════════════════════╧══════════╧═══════════════╧═══════════════╝
-`
-    );
+    expect(res).toMatchObject(apps);
+    expect(res.length).toEqual(apps.length);
   });
 
   it('Should return "no applications found"', async () => {
@@ -51,9 +39,10 @@ describe('applications', () => {
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
+      output: 'json',
       filter: JSON.stringify(filter),
     });
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
-    expect(ConsoleMock.log).toHaveBeenCalledWith('No applications found');
+    expect(ConsoleMock.log).toHaveBeenCalledWith(JSON.stringify([]));
   });
 });

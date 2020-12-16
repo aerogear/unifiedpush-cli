@@ -1,14 +1,15 @@
+import {Guid} from 'guid-typescript';
 import {
   AndroidVariant,
   IOSTokenVariant,
   IOSVariant,
   PushApplication,
+  PushApplicationDefinition,
   Variant,
   WebPushVariant,
 } from '@aerogear/unifiedpush-admin-client';
-import {Guid} from 'guid-typescript';
+import {FlatPushMessageInformation} from '@aerogear/unifiedpush-admin-client/dist/src/commands/metrics/LoadMetricsCommand';
 import {VariantDefinition} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
-
 export class IDGenerator {
   static nextid?: string;
 
@@ -31,12 +32,54 @@ export class IDGenerator {
 
 export class DataStore {
   private appList: PushApplication[] = [];
+  private appMetrics: {[key: string]: FlatPushMessageInformation[]} = {};
+  public readonly reset = (): void => {
+    this.appList = [];
+  };
+  public readonly getAllApps = (): PushApplication[] => this.appList;
+  public readonly getAppMetrics = (
+    appId: string,
+    page: number,
+    perPage: number,
+    sorting: string,
+    search: string
+  ): FlatPushMessageInformation[] => {
+    const sort = (
+      ary: FlatPushMessageInformation[]
+    ): FlatPushMessageInformation[] =>
+      ary.sort(
+        (a: FlatPushMessageInformation, b: FlatPushMessageInformation) =>
+          (a.submitDate! < b.submitDate! ? -1 : 1) *
+          (sorting === 'asc' ? 1 : -1)
+      );
 
-  public readonly reset = () => (this.appList = []);
-  public readonly getAllApps = () => this.appList;
+    const allMetrics = sort(
+      (this.appMetrics[appId] || []).filter(
+        metric => metric.rawJsonMessage.indexOf(search) !== -1
+      )
+    );
+
+    const res =
+      page === -1
+        ? allMetrics
+        : paginate<FlatPushMessageInformation>(allMetrics, page, perPage);
+    return res;
+  };
+
+  public readonly generateMetrics = (appId: string): void => {
+    this.appMetrics[appId] = this.appMetrics[appId] || [];
+    this.appMetrics[appId].push({
+      pushApplicationId: appId,
+      rawJsonMessage: '{"key": "value"}',
+      ipAddress: '127.0.0.1',
+      clientIdentifier: Guid.create().toString(),
+      submitDate: getRandomDate(),
+    });
+  };
 
   public readonly createApp = (
     name: string,
+    appDef: PushApplicationDefinition = {},
     persist = false
   ): PushApplication => {
     const app = {
@@ -44,6 +87,7 @@ export class DataStore {
       masterSecret: Guid.create().toString(),
       developer: 'test developer',
       name,
+      ...appDef,
     };
 
     if (persist) {
@@ -112,6 +156,8 @@ export class DataStore {
           secret: Guid.create().toString(),
           alias: 'mailto:test@redhat.com',
           type: 'web_push',
+          publicKey: Guid.create().toString(),
+          privateKey: Guid.create().toString(),
           ...def,
         } as WebPushVariant;
     }
@@ -124,15 +170,23 @@ export class DataStore {
     return variant!;
   };
 
-  setAppList(pushApplications: PushApplication[]) {
+  setAppList(pushApplications: PushApplication[]): void {
     this.appList = pushApplications;
   }
 
-  getApp(appId: string) {
+  getApp(appId: string): PushApplication | undefined {
     return this.appList.find(app => app.pushApplicationID === appId);
   }
 
-  deleteApplication(appId: string) {
+  deleteApplication(appId: string): void {
     this.appList = this.appList.filter(app => app.pushApplicationID !== appId);
   }
 }
+
+const getRandomDate = (
+  from: Date = new Date(2000, 0, 1),
+  to: Date = new Date(2020, 0, 1)
+) => new Date(from.getTime() + Math.random() * (to.getTime() - from.getTime()));
+
+const paginate = <T>(ary: T[], pageNumber: number, pageSize: number): T[] =>
+  ary.slice(pageNumber * pageSize, (pageNumber + 1) * pageSize);
