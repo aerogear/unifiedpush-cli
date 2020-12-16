@@ -1,11 +1,10 @@
-import {table} from 'table';
 import {Arguments, Argv} from 'yargs';
 import {
   PushApplication,
   PushApplicationFilter,
 } from '@aerogear/unifiedpush-admin-client';
 import {UPSAdminClientFactory} from '../../utils/UPSAdminClientFactory';
-import {normalizeFilter} from '../../utils/FilterUtils';
+import {generateOutput} from '../../utils/output';
 
 export const command = 'list';
 
@@ -13,64 +12,68 @@ export const describe = 'lists the applications';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['page', 'filter'], 'Applications list:')
-    .option('page', {
-      required: false,
-      type: 'number',
-      describe: 'page to be shown',
-      requiresArg: true,
-    })
-    .option('filter', {
+    .group(
+      ['app-id', 'name', 'description', 'developer', 'output'],
+      'Applications list:'
+    )
+    .option('name', {
       required: false,
       type: 'string',
-      describe: 'Filter to be used to refine the list (JSon format)',
+      describe: 'Returns all the applications with a given name',
+      requiresArg: true,
+    })
+    .option('app-id', {
+      required: false,
+      type: 'string',
+      describe: 'Return the application identified by the given id',
+      requiresArg: true,
+    })
+    .option('description', {
+      required: false,
+      type: 'string',
+      describe: 'Returns all the applications matching the given description',
+      requiresArg: true,
+    })
+    .option('developer', {
+      required: false,
+      type: 'string',
+      describe: 'Returns all the applications matching the given developer',
       requiresArg: true,
     })
     .help();
 };
 
-export const handler = async (argv: Arguments) => {
-  const filter: PushApplicationFilter = argv.filter
-    ? normalizeFilter(JSON.parse(argv.filter as string))
-    : {};
-
-  // filter.includeActivity = true;
-  // filter.includeDeviceCount = true;
-
-  const page: number = (argv.page as number) || 0;
+export const handler = async (argv: Arguments<PushApplicationFilter>) => {
   const apps = await UPSAdminClientFactory.getUpsAdminInstance(argv)
     .applications.search()
-    .withFilter(filter)
-    .page(page)
+    .withFilter({
+      pushApplicationID: argv.appId as string,
+      name: argv.name,
+      developer: argv.developer,
+      description: argv.description,
+    })
+    .page(-1)
     .execute();
 
-  if (apps.list.length !== 0) {
-    const tableData = apps.list.reduce(
-      (
-        previousValue: string[][],
-        currentValue: PushApplication
-      ): string[][] => {
-        previousValue.push([
-          currentValue.name,
-          currentValue.pushApplicationID!,
-          `${currentValue.variants?.length || 0}`,
-          `${currentValue.metadata?.deviceCount}`,
-          `${currentValue.metadata?.activity}`,
-        ]);
-        return previousValue;
-      },
-      [
-        [
-          'NAME',
-          'PUSH-APPLICATION-ID',
-          'VARIANTS',
-          'INSTALLATIONS',
-          'SENT-MESSAGES',
-        ],
-      ]
-    );
-    console.log(table(tableData));
-  } else {
-    console.log('No applications found');
-  }
+  console.log(
+    generateOutput({
+      format: argv.output as string,
+      headers: [
+        'NAME',
+        'PUSH-APPLICATION-ID',
+        'VARIANTS',
+        'INSTALLATIONS',
+        'SENT-MESSAGES',
+      ],
+      properties: ['name', 'id', 'varCount', 'deviceCount', 'activity'],
+      transformer: (app: PushApplication) => ({
+        name: app.name,
+        id: app.pushApplicationID,
+        varCount: `${app.variants?.length || 0}`,
+        deviceCount: `${app.metadata?.deviceCount || 0}`,
+        activity: `${app.metadata?.activity || 0}`,
+      }),
+      value: apps.list,
+    })
+  );
 };
