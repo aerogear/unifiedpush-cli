@@ -5,6 +5,7 @@ on:
       - master
     paths-ignore:
       - 'package.json'
+      - 'package-lock.json'
       - 'CHANGELOG.md'
 jobs:
   build:
@@ -15,7 +16,7 @@ jobs:
       with:
         token: ${{ secrets.ACTION_TOKEN }}
     - name: Bump version and push tag
-      uses: TriPSs/conventional-changelog-action@v3
+      uses: TriPSs/conventional-changelog-action@v3.7.0
       with:
         github-token: ${{ secrets.ACTION_TOKEN }}
         git-message: 'chore(release): {version}'
