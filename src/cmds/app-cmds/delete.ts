@@ -9,31 +9,31 @@ export const describe = 'delete applications';
 export const builder = (yargs: Argv) => {
   return yargs
     .group(
-      ['name', 'app-id', 'description', 'developer'],
+      ['url', 'name', 'app-id', 'description', 'developer'],
       'Delete Applications:'
     )
     .option('name', {
       required: false,
       type: 'string',
-      describe: 'Returns all the applications with a given name',
+      describe: 'Deletes all the applications with a given name',
       requiresArg: true,
     })
     .option('app-id', {
       required: false,
       type: 'string',
-      describe: 'Return the application identified by the given id',
+      describe: 'Deletes the application identified by the given id',
       requiresArg: true,
     })
     .option('description', {
       required: false,
       type: 'string',
-      describe: 'Returns all the applications matching the given description',
+      describe: 'Deletes all the applications matching the given description',
       requiresArg: true,
     })
     .option('developer', {
       required: false,
       type: 'string',
-      describe: 'Returns all the applications matching the given developer',
+      describe: 'Deletes all the applications matching the given developer',
       requiresArg: true,
     })
     .help();

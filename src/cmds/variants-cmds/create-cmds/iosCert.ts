@@ -11,6 +11,7 @@ export const builder = (yargs: Argv) => {
   return yargs
     .group(
       [
+        'url',
         'app-id',
         'name',
         'certificate',

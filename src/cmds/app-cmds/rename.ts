@@ -8,7 +8,7 @@ export const describe = 'rename one application';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['app-id', 'output'], 'Rename Application:')
+    .group(['url', 'app-id', 'name', 'output'], 'Rename Application:')
     .option('app-id', {
       required: true,
       type: 'string',

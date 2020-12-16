@@ -7,11 +7,20 @@ export const describe = 'delete variant(s)';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['app-id', 'name', 'developer', 'type'], 'Delete Variants:')
+    .group(
+      ['app-id', 'variant-id', 'name', 'developer', 'type'],
+      'Delete Variants:'
+    )
     .option('app-id', {
       required: true,
       type: 'string',
       describe: 'The application id',
+      requiresArg: true,
+    })
+    .option('variant-id', {
+      required: false,
+      type: 'string',
+      describe: 'Deletes the variant identified by the specified id',
       requiresArg: true,
     })
     .option('name', {
@@ -38,6 +47,7 @@ export const builder = (yargs: Argv) => {
 export const handler = async (argv: Arguments<VariantFilter>) => {
   const filter = {
     pushApplicationID: argv.appId as string,
+    variantID: argv.variantId as string,
     ...argv,
   };
   const deletedVariants = await UPSAdminClientFactory.getUpsAdminInstance(argv)

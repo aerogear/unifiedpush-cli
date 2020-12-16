@@ -10,11 +10,20 @@ exports.describe =
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['app-id', 'type', 'name', 'developer', 'output'], 'Variants list:')
+    .group(
+      ['url', 'app-id', 'variant-id', 'type', 'name', 'developer', 'output'],
+      'List variants:'
+    )
     .option('app-id', {
       required: true,
       type: 'string',
       describe: 'The application id',
+      requiresArg: true,
+    })
+    .option('variant-id', {
+      required: false,
+      type: 'string',
+      describe: 'The variant id',
       requiresArg: true,
     })
     .option('name', {
@@ -49,9 +58,8 @@ export const builder = (yargs: Argv) => {
 
 export const handler = async (argv: Arguments<VariantFilter>) => {
   const filter: VariantFilter = {
-    name: argv.name,
-    developer: argv.developer,
-    type: argv.type,
+    variantID: argv.variantId as string,
+    ...argv,
   };
 
   const variants = await UPSAdminClientFactory.getUpsAdminInstance(argv)

@@ -7,7 +7,7 @@ export const describe = 'create a new application';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['name', 'output'], 'Create application:')
+    .group(['url', 'name', 'output'], 'Create application:')
     .option('name', {
       required: true,
       type: 'string',
