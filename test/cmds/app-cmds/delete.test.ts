@@ -2,7 +2,6 @@
 import {Arguments} from 'yargs';
 import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/delete';
-import * as inquirer from 'inquirer';
 import {
   createApplications,
   getAllApplications,
@@ -20,10 +19,6 @@ beforeEach(() => {
   ConsoleMock.init();
   initMockEngine();
   ConsoleMock.mockClear();
-  const promptMock = (inquirer.prompt as unknown) as jest.Mock<
-    typeof inquirer.prompt
-  >;
-  promptMock.mockClear();
 });
 
 afterEach(() => {
@@ -36,7 +31,7 @@ describe('Delete Application', () => {
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
-      appId: [''],
+      appId: '',
       _: [''],
       $0: '',
     } as Arguments);
@@ -49,11 +44,11 @@ describe('Delete Application', () => {
     // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
-      appId: ['1234'],
+      name: 'bad name',
       _: [''],
       $0: '',
     } as Arguments);
     expect(ConsoleMock.log).toHaveBeenCalled();
-    expect(ConsoleMock.log).toHaveBeenCalledWith('0 applications deleted');
+    expect(ConsoleMock.log).toHaveBeenCalledWith('0 application(s) deleted');
   });
 });

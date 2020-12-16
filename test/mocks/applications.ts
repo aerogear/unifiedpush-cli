@@ -1,11 +1,16 @@
 // applications mocks
 import * as nock from 'nock';
+import {DataStore} from './DataStore';
+import {VariantsMock} from './variants';
+import {Guid} from 'guid-typescript';
+import {URL} from 'url';
 import {
   PushApplication,
   PushApplicationDefinition,
+  Variant,
 } from '@aerogear/unifiedpush-admin-client';
-import {DataStore} from './DataStore';
-import {VariantsMock} from './variants';
+import {VariantDefinition} from '@aerogear/unifiedpush-admin-client/dist/src/commands/variants/Variant';
+import {getAppMetrics} from './UPSMock';
 
 interface VariantMockDictionary {
   [appId: string]: VariantsMock;
@@ -14,21 +19,27 @@ interface VariantMockDictionary {
 export class ApplicationsMock {
   private readonly datastore: DataStore;
   private readonly variantsMocks: VariantMockDictionary = {};
-  constructor(datastore: DataStore) {
+  private readonly basePath;
+  constructor(datastore: DataStore, basePath: string) {
     this.datastore = datastore;
+    this.basePath = basePath;
     this.setUpCreateMock();
     this.setUpGetApplicationsMock();
   }
 
   public readonly createApplication = (
     datastore: DataStore,
-    appName: string
+    appName: string,
+    appDef: PushApplicationDefinition = {}
   ): PushApplication => {
-    const app = this.datastore.createApp(appName, true);
+    const app = this.datastore.createApp(appName, appDef, true);
     this.setUpGetApplicationMock(app.pushApplicationID);
     this.setUpDeleteMock(app.pushApplicationID);
     this.setUpUpdateMock(app.pushApplicationID);
+    this.setUpRenewMasterSecretMock(app.pushApplicationID);
+    this.setUpGetMetricsMock(app.pushApplicationID);
     this.variantsMocks[app.pushApplicationID] = new VariantsMock(
+      this.basePath,
       this.datastore,
       app
     );
@@ -38,26 +49,67 @@ export class ApplicationsMock {
   public readonly createVariant = (
     appId: string,
     name: string,
-    variantType: string
-  ) => {
+    variantType: string,
+    def: VariantDefinition = {}
+  ): Variant => {
     const mock = this.variantsMocks[appId];
-    mock.createVariant(name, variantType);
+    return mock.createVariant(name, variantType, def);
+  };
+
+  private readonly setUpRenewMasterSecretMock = (appId: string) => {
+    nock(`${this.basePath}`)
+      .put(`/rest/applications/${appId}/reset`)
+      .reply(() => {
+        const app = this.datastore.getApp(appId);
+        if (app) {
+          app.masterSecret = Guid.create().toString();
+          return [204, app];
+        }
+        return [404];
+      })
+      .persist();
+  };
+
+  private readonly setUpGetMetricsMock = (appId: string) => {
+    nock(`${this.basePath}`)
+      //.get(`/rest/metrics/messages/application/${appId}?page=0&per_page=10&sort=desc&search=`)
+      .get(`/rest/metrics/messages/application/${appId}`)
+      .query(() => true)
+      .reply(uri => {
+        const url = new URL(this.basePath + uri);
+        const page = url.searchParams.get('page')
+          ? parseInt(url.searchParams.get('page')!)
+          : 0;
+        const perPage = url.searchParams.get('per_page')
+          ? parseInt(url.searchParams.get('per_page')!)
+          : 10;
+        const sort = url.searchParams.get('sort') ?? 'desc';
+        const search = url.searchParams.get('search') ?? '';
+        const metrics = getAppMetrics(appId, page, perPage, sort, search);
+        if (!metrics) {
+          return [404];
+        }
+
+        return [200, metrics, {total: getAppMetrics(appId).length}];
+      })
+      .persist();
   };
 
   private readonly setUpGetApplicationsMock = () => {
-    let page: number, per_page: number;
-
-    nock('http://localhost:9999')
+    nock(`${this.basePath}`)
       .get('/rest/applications')
-      .query(query => {
-        page = parseInt(query.page as string);
-        per_page = parseInt(query.per_page as string);
-        return true;
-      })
-      .reply(() => {
+      .query(() => true)
+      .reply(uri => {
+        const url = new URL(this.basePath + uri);
+        const page = url.searchParams.get('page')
+          ? parseInt(url.searchParams.get('page')!)
+          : 0;
+        const perPage = url.searchParams.get('per_page')
+          ? parseInt(url.searchParams.get('per_page')!)
+          : 10;
         return [
           200,
-          getApplications(this.datastore, undefined, page, per_page),
+          getApplications(this.datastore, undefined, page, perPage),
           {total: this.datastore.getAllApps().length},
         ];
       })
@@ -65,8 +117,28 @@ export class ApplicationsMock {
   };
 
   private readonly setUpGetApplicationMock = (id: string) => {
-    nock('http://localhost:9999')
+    nock(this.basePath)
       .get(`/rest/applications/${id}`)
+      .reply(() => {
+        const app = this.datastore
+          .getAllApps()
+          .find(app => app.pushApplicationID === id);
+        if (app) {
+          return [
+            200,
+            this.datastore
+              .getAllApps()
+              .find(app => app.pushApplicationID === id),
+            {total: this.datastore.getAllApps().length},
+          ];
+        }
+        return [404];
+      })
+      .persist();
+    nock(this.basePath)
+      .get(
+        `/rest/applications/${id}?includeDeviceCount=true&includeActivity=true`
+      )
       .reply(() => {
         const app = this.datastore
           .getAllApps()
@@ -86,7 +158,7 @@ export class ApplicationsMock {
   };
 
   private readonly setUpCreateMock = (): void => {
-    nock('http://localhost:9999')
+    nock(this.basePath)
       .post('/rest/applications')
       .reply(200, (uri: string, body: PushApplicationDefinition) => {
         const app = this.datastore.createApp(body.name!);
@@ -96,7 +168,7 @@ export class ApplicationsMock {
   };
 
   private readonly setUpDeleteMock = (appId: string): void => {
-    nock('http://localhost:9999')
+    nock(this.basePath)
       .delete(`/rest/applications/${appId}`)
       .reply(() => {
         if (
@@ -118,7 +190,7 @@ export class ApplicationsMock {
   };
 
   private readonly setUpUpdateMock = (appId: string): void => {
-    nock('http://localhost:9999')
+    nock(this.basePath)
       .put(`/rest/applications/${appId}`)
       .reply((url: string, body) => {
         const update = body as PushApplicationDefinition;

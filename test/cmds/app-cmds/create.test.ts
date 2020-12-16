@@ -1,6 +1,6 @@
 import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/create';
-import {initMockEngine} from '../../mocks/UPSMock';
+import {getAllApplications, initMockEngine} from '../../mocks/UPSMock';
 import {IDGenerator} from '../../mocks/DataStore';
 
 beforeEach(() => {
@@ -21,20 +21,16 @@ describe('applications', () => {
     await handler({
       url: 'http://localhost:9999',
       name: 'TEST-APP',
+      output: 'json',
       _: [],
       $0: '',
     });
-    expect(ConsoleMock.log).toHaveBeenCalledTimes(2);
-    expect(ConsoleMock.log).toHaveBeenCalledWith(
-      'Application created successfully'
+
+    const testApp = getAllApplications().find(
+      app => app.pushApplicationID === appId
     );
-    expect(ConsoleMock.log).toHaveBeenCalledWith(
-      `╔══════════╤══════════════════════════════════════╗
-║ NAME     │ PUSH-APPLICATION-ID                  ║
-╟──────────┼──────────────────────────────────────╢
-║ TEST-APP │ ${appId} ║
-╚══════════╧══════════════════════════════════════╝
-`
-    );
+
+    expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
+    expect(ConsoleMock.log).toHaveBeenCalledWith(JSON.stringify([testApp]));
   });
 });
