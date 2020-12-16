@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/figlet": "1.2.1",
     "@types/jest": "26.0.15",
-    "@types/node": "10.17.26",
+    "@types/node": "10.17.49",
     "@types/table": "5.0.0",
     "@types/urlsafe-base64": "1.0.28",
     "@types/yargs": "15.0.5",
