@@ -13,7 +13,7 @@ export const describe = 'lists the applications';
 export const builder = (yargs: Argv) => {
   return yargs
     .group(
-      ['app-id', 'name', 'description', 'developer', 'output'],
+      ['url', 'app-id', 'name', 'description', 'developer', 'output'],
       'Applications list:'
     )
     .option('name', {
@@ -25,7 +25,7 @@ export const builder = (yargs: Argv) => {
     .option('app-id', {
       required: false,
       type: 'string',
-      describe: 'Return the application identified by the given id',
+      describe: 'Returns the application identified by the given id',
       requiresArg: true,
     })
     .option('description', {

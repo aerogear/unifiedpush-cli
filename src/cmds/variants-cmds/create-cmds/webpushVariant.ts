@@ -8,7 +8,7 @@ export const describe = 'Create a new WebPush variant';
 
 export const builder = (yargs: Argv) => {
   return yargs
-    .group(['app-id', 'name', 'alias'], 'Create Variant:')
+    .group(['url', 'app-id', 'name', 'alias', 'output'], 'Create Variant:')
     .option('alias', {
       required: true,
       type: 'string',
