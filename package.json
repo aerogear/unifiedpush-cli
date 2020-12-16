@@ -28,7 +28,7 @@
     "posttest": "npm run check"
   },
   "devDependencies": {
-    "@types/figlet": "1.2.0",
+    "@types/figlet": "1.2.1",
     "@types/jest": "26.0.15",
     "@types/node": "10.17.26",
     "@types/table": "5.0.0",
