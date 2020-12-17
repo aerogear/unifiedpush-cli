@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {Arguments} from 'yargs';
 import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/variants-cmds/list';
@@ -25,7 +24,6 @@ describe('variants list', () => {
     createApplications({variantCount: 2, variantType: 'android'});
     const testApp = getAllApplications()[2];
 
-    // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
       appId: testApp.pushApplicationID,
@@ -44,7 +42,6 @@ describe('variants list', () => {
     deleteApplication(testApp.pushApplicationID);
 
     const filter: VariantFilter = {name: 'wrongname'};
-    // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
       appId: testApp.pushApplicationID,

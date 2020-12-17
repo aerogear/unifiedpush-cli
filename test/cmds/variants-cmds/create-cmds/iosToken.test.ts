@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {ConsoleMock} from '../../../mocks';
 import {
   createApplication,
@@ -6,8 +5,12 @@ import {
   initMockEngine,
 } from '../../../mocks/UPSMock';
 import {IDGenerator} from '../../../mocks/DataStore';
-import {IOSTokenVariantDefinition} from '@aerogear/unifiedpush-admin-client';
+import {
+  IOSTokenVariant,
+  IOSTokenVariantDefinition,
+} from '@aerogear/unifiedpush-admin-client';
 import {handler} from '../../../../src/cmds/variants-cmds/create-cmds/iosToken';
+import {Arguments} from 'yargs';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -48,10 +51,9 @@ describe('variants create', () => {
     };
 
     const variantID = IDGenerator.peek();
-    // @ts-ignore
-    await handler(argv);
+    await handler((argv as unknown) as Arguments<IOSTokenVariant>);
 
-    const newVariant = app.variants?.find(v => v.variantID === variantID)!;
+    const newVariant = app.variants!.find(v => v.variantID === variantID)!;
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
     expect(JSON.parse(ConsoleMock.log.mock.calls[0][0])).toEqual([newVariant]);
     expect(newVariant.type).toEqual('ios_token');

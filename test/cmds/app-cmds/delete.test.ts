@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {Arguments} from 'yargs';
 import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/app-cmds/delete';
@@ -28,7 +27,6 @@ afterEach(() => {
 describe('Delete Application', () => {
   it('Should delete all applications from UPS', async () => {
     createApplications({appCount: 3});
-    // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
       appId: '',
@@ -41,7 +39,6 @@ describe('Delete Application', () => {
   });
 
   it('Should fail deletion', async () => {
-    // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
       name: 'bad name',
