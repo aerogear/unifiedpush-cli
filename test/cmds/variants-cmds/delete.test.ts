@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {Arguments} from 'yargs';
 import {ConsoleMock} from '../../mocks';
 import {handler} from '../../../src/cmds/variants-cmds/delete';
@@ -26,7 +25,6 @@ describe('variants delete', () => {
     const testApp = getAllApplications()[3];
     const variantCount = testApp.variants?.length || 0;
 
-    // @ts-ignore
     await handler({
       url: 'http://localhost:9999',
       appId: testApp.pushApplicationID,

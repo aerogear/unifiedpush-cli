@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import {ConsoleMock} from '../../../mocks';
 import {
   createApplication,
@@ -8,6 +7,7 @@ import {
 import {IDGenerator} from '../../../mocks/DataStore';
 import {AndroidVariant} from '@aerogear/unifiedpush-admin-client';
 import {handler} from '../../../../src/cmds/variants-cmds/create-cmds/andoridVariant';
+import {Arguments} from 'yargs';
 
 beforeEach(() => {
   // Clear all instances and calls to constructor and all methods:
@@ -46,8 +46,7 @@ describe('variants create', () => {
 
     const variantID = IDGenerator.peek();
 
-    // @ts-ignore
-    await handler(argv);
+    await handler((argv as unknown) as Arguments<AndroidVariant>);
     expect(ConsoleMock.log).toHaveBeenCalledTimes(1);
     expect(JSON.parse(ConsoleMock.log.mock.calls[0][0])).toEqual([
       app.variants?.find(v => v.variantID === variantID),
