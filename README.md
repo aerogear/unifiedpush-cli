@@ -5,9 +5,6 @@
 
 The UnifiedPush Client CLI makes it easy to interact with the UnifiedPush Server from the command line.
 
-**NOTE**: it is still in alpha version and, although it works, it still lacks many features. However, if you still want to 
-try this tool or help with the development, you are welcome
-
 ## Prerequisites
 
 To run the UnifiedPush Client you will need to have [node](https://nodejs.org/) installed.
