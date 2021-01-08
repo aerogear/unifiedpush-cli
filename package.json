@@ -23,10 +23,11 @@
     "clean": "gts clean",
     "compile": "tsc -p .",
     "fix": "gts fix",
-    "prepare": "npm run compile",
+    "prepare": "npm run snyk-protect && npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint",
-    "lint": "gts lint"
+    "lint": "gts lint",
+    "snyk-protect": "snyk protect"
   },
   "devDependencies": {
     "@types/jest": "26.0.20",
@@ -45,7 +46,8 @@
     "@aerogear/unifiedpush-admin-client": "4.5.0",
     "eslint-plugin-jest": "^23.8.2",
     "table": "^5.4.6",
-    "yargs": "^15.3.1"
+    "yargs": "^15.3.1",
+    "snyk": "^1.437.3"
   },
   "repository": {
     "type": "git",
@@ -53,5 +55,6 @@
   },
   "bugs": {
     "url": "https://github.com/aerogear/unifiedpush-cli/issues"
-  }
+  },
+  "snyk": true
 }
