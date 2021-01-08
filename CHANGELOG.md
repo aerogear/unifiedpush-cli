@@ -1,3 +1,16 @@
+## [1.0.2](https://github.com/aerogear/unifiedpush-cli/compare/1.0.1...1.0.2) (2021-01-08)
+
+
+### Bug Fixes
+
+* package.json, package-lock.json & .snyk to reduce vulnerabilities ([66dbd23](https://github.com/aerogear/unifiedpush-cli/commit/66dbd236bb4b18e7d33e6b384b153151d41dbd05))
+
+
+
+## [1.0.1](https://github.com/aerogear/unifiedpush-cli/compare/1.0.0...1.0.1) (2020-12-18)
+
+
+
 # [1.0.0](https://github.com/aerogear/unifiedpush-cli/compare/0.2.10...1.0.0) (2020-12-16)
 
 
@@ -23,14 +36,6 @@
 
 
 ## [0.2.9](https://github.com/aerogear/unifiedpush-cli/compare/0.2.8...0.2.9) (2020-06-24)
-
-
-
-## [0.2.8](https://github.com/aerogear/unifiedpush-cli/compare/0.2.7...0.2.8) (2020-06-24)
-
-
-
-## [0.2.7](https://github.com/aerogear/unifiedpush-cli/compare/0.2.6...0.2.7) (2020-06-24)
 
 
 
