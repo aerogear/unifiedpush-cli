@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@aerogear/unifiedpush-admin-client": "4.5.0",
-    "eslint-plugin-jest": "^24.0.0",
+    "eslint-plugin-jest": "^25.0.0",
     "table": "^6.0.0",
     "yargs": "^17.0.1",
     "snyk": "^1.518.0"
