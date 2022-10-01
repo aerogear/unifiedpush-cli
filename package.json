@@ -47,7 +47,7 @@
     "eslint-plugin-jest": "^25.0.0",
     "table": "^6.0.0",
     "yargs": "^17.0.1",
-    "snyk": "^1.518.0"
+    "snyk": "^1.996.0"
   },
   "repository": {
     "type": "git",
