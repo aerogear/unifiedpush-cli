@@ -33,7 +33,7 @@
     "@types/jest": "27.0.2",
     "@types/node": "14.18.36",
     "@types/table": "6.0.0",
-    "@types/yargs": "17.0.3",
+    "@types/yargs": "17.0.32",
     "gts": "3.1.0",
     "guid-typescript": "1.0.9",
     "jest": "27.2.5",
